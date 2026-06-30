@@ -88,21 +88,21 @@ h1, h2, h3 {
 /* ---------------- Header (uproszczony, bez i18n na razie) ---------------- */
 
 .site-header {
-  border-bottom: var(--stroke) solid var(--line-soft);
-  background: var(--paper);
+  padding: 22px 0 22px;
+  position: relative;
+  z-index: 10;
+  border-bottom: 2px solid var(--line);
 }
 
 .header-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 16px var(--gutter);
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
 }
 
 @media (max-width: 480px) {
-  .header-row { align-items: flex-end; }
   .brand { font-size: 24px; gap: 8px; }
   .brand-mark { height: 48px; }
   .back-to-main { font-size: 12px; }
