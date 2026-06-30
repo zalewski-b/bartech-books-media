@@ -91,7 +91,7 @@ h1, h2, h3 {
   padding: 22px 0 22px;
   position: relative;
   z-index: 10;
-  border-bottom: 2px solid var(--line);
+  border-bottom: var(--stroke) solid var(--line);
 }
 
 .header-row {
@@ -111,9 +111,9 @@ h1, h2, h3 {
 .brand {
   display: inline-flex;
   align-items: flex-end;
-  gap: 14px;
+  gap: 10px;
   font-family: var(--font-display);
-  font-size: 38px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1;
   color: var(--ink);
@@ -121,7 +121,7 @@ h1, h2, h3 {
 }
 
 .brand-mark {
-  height: 80px;
+  height: 56px;
   width: auto;
   flex-shrink: 0;
 }
