@@ -1,0 +1,740 @@
+/* ===========================================================
+   audio.bartechbooks.com — design tokens
+   Dziedziczone 1:1 z bartech-books.com (assets/css/style.css),
+   ten sam papierowy, cieply system. Nie duplikowac wartosci tutaj
+   recznie jesli main site zmieni palete - skopiowac blok :root.
+   =========================================================== */
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('../fonts/Caveat-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('../fonts/Nunito-Variable.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+:root {
+  --paper:        #FFFBF2;
+  --paper-dim:    #EAF0F5;
+  --ink:          #4A4038;
+  --ink-soft:     #8A8275;
+  --accent-blue:   #4F84B0;
+  --sage:         #3A7D6B;
+  --mustard:      #F2C14E;
+  --line:         #6B5D4F;
+  --line-soft:    #C9C2B4;
+
+  --font-display: 'Caveat', cursive;
+  --font-body:    'Nunito', system-ui, -apple-system, sans-serif;
+
+  --max-width: 1120px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --radius: 16px;
+  --stroke: 1.5px;
+
+  --shadow-pop: 0 10px 28px rgba(74, 64, 56, 0.13), 0 2px 6px rgba(74, 64, 56, 0.08);
+  --shadow-card: 0 4px 16px rgba(74, 64, 56, 0.08), 0 1px 3px rgba(74, 64, 56, 0.06);
+  --shadow-soft: 0 8px 24px rgba(74, 64, 56, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 500;
+  line-height: 1.55;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img, svg { max-width: 100%; display: block; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0 0 12px;
+  line-height: 1.15;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------------- Header (uproszczony, bez i18n na razie) ---------------- */
+
+.site-header {
+  border-bottom: var(--stroke) solid var(--line-soft);
+  background: var(--paper);
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--gutter);
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .header-row { align-items: flex-end; }
+  .brand { font-size: 24px; gap: 8px; }
+  .brand-mark { height: 48px; }
+  .back-to-main { font-size: 12px; }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 14px;
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark {
+  height: 80px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  transform: translateY(1px);
+}
+
+.back-to-main {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.back-to-main:hover { color: var(--accent-blue); }
+
+/* ---------------- Hero / intro sekcji ---------------- */
+
+.page-hero {
+  padding: 48px 0 24px;
+  text-align: center;
+}
+
+.page-hero h1 {
+  font-size: clamp(32px, 5vw, 48px);
+}
+
+.page-hero p {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+/* ---------------- Karty wyboru kategorii (Ptaki / Plazy / Maszyny) ---------------- */
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  padding: 24px 0 64px;
+}
+
+@media (max-width: 880px) {
+  .category-grid { grid-template-columns: 1fr; }
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 40px 24px;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-pop);
+  text-decoration: none;
+}
+
+.category-card-featured {
+  display: flex;
+  flex-direction: column;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-card-featured:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-pop);
+  text-decoration: none;
+}
+
+.category-card-featured-art {
+  flex: 2;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--paper-dim), #DCE8F0);
+}
+
+.category-card-featured-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.category-card-featured-body {
+  flex: 1;
+  padding: 20px 24px 24px;
+  text-align: center;
+  border-top: var(--stroke) solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--paper-dim);
+  font-size: 36px;
+}
+
+.category-card-icon-image {
+  width: 200px;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-dim);
+}
+
+.category-card-icon-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-card-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.category-card-desc {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.category-card-disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.category-card-disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-card);
+}
+
+.category-card-badge {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  background: var(--paper-dim);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---------------- Grid kart ptakow ---------------- */
+
+.bird-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 8px 0 64px;
+}
+
+@media (max-width: 1020px) {
+  .bird-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 720px) {
+  .bird-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 460px) {
+  .bird-grid { grid-template-columns: 1fr; }
+}
+
+.bird-card {
+  display: flex;
+  flex-direction: column;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease;
+}
+
+.bird-card:hover {
+  box-shadow: var(--shadow-pop);
+}
+
+.bird-card-highlighted {
+  animation: bird-highlight-pulse 1.3s ease-in-out 2;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes bird-highlight-pulse {
+  0%, 100% { box-shadow: var(--shadow-card); }
+  50% { box-shadow: 0 0 0 4px var(--accent-blue), var(--shadow-pop); }
+}
+
+/* Wariant B: 3/4 obrazek + 1/4 odtwarzacz, w ramach kwadratu */
+.bird-card-art {
+  aspect-ratio: 896 / 1200;
+  flex: 3;
+  background: linear-gradient(135deg, var(--paper-dim), #DCE8F0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: var(--stroke) solid var(--line-soft);
+  overflow: hidden;
+  position: relative;
+}
+
+.bird-info-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.85);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  line-height: 1;
+}
+.bird-info-btn:hover { background: #fff; color: var(--accent-blue); }
+
+.bird-attribution-popup {
+  position: absolute;
+  top: 32px;
+  right: 6px;
+  max-width: 85%;
+  background: #fff;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-card);
+  z-index: 3;
+  display: none;
+}
+.bird-attribution-popup.visible { display: block; }
+.bird-attribution-popup a { font-size: 11px; }
+
+.bird-card-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bird-card-art-placeholder {
+  width: 56px;
+  height: 56px;
+  color: var(--line-soft);
+}
+
+.bird-card-player {
+  flex: 1;
+  padding: 8px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.bird-card-name-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  position: relative;
+}
+
+.bird-card-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  min-width: 0;
+}
+
+.bird-share-btn {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  transition: background 0.15s, color 0.15s;
+}
+.bird-share-btn svg { width: 100%; height: 100%; }
+.bird-share-btn:hover { background: var(--paper-dim); color: var(--accent-blue); }
+.bird-share-btn.copied { background: var(--sage); color: #fff; }
+
+.bird-share-tooltip {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  transform: translateY(-100%);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
+  z-index: 4;
+}
+.bird-share-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 8px;
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+}
+.bird-share-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bird-card-name-lat {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.1;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.bird-card-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.bird-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--line-soft);
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  touch-action: none;
+}
+
+.bird-progress-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: var(--accent-blue);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.bird-progress-handle {
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-blue);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(74, 64, 56, 0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.bird-card-buttons-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.bird-play-btn {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  background: #fff;
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.bird-play-btn:hover { background: var(--paper-dim); }
+.bird-play-btn svg { width: 22px; height: 22px; }
+
+.bird-restart-btn,
+.bird-loop-btn {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: var(--stroke) solid var(--line-soft);
+  background: #fff;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+}
+.bird-restart-btn:hover,
+.bird-loop-btn:hover { background: var(--paper-dim); }
+.bird-restart-btn svg { width: 18px; height: 18px; }
+.bird-loop-btn svg { width: 18px; height: 18px; }
+.bird-loop-btn.active { color: var(--accent-blue); border-color: var(--accent-blue); background: var(--paper-dim); }
+
+.bird-card-meta {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* ---------------- Footer minimalny ---------------- */
+
+.site-footer {
+  border-top: var(--stroke) solid var(--line-soft);
+  padding: 24px var(--gutter) 40px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ---------------- Wieksze odstepy w odtwarzaczu na waskim mobile ----------------
+   Umieszczone na koncu pliku celowo - .bird-card-player i .bird-card-controls
+   sa zdefiniowane wczesniej w pliku z ta sama specyficznoscia selektora,
+   wiec przy identycznej specyficznosci wygrywa reguła PÓŹNIEJSZA w kodzie,
+   niezaleznie od media query. Regula w media query umieszczona przed bazowa
+   definicja zostaje przez nia nadpisana - to byl blad w poprzedniej wersji. */
+@media (max-width: 460px) {
+  .bird-card-controls { margin-top: 18px; gap: 16px; }
+}
+
+/* ---------------- Lightbox - powiekszenie zdjecia ptaka ---------------- */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 64, 56, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  padding: 24px;
+}
+
+.lightbox-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: min(90vw, 720px);
+  max-height: 90vh;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  cursor: default;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+}
+
+.lightbox-close:hover { background: var(--paper-dim); }
+.lightbox-close svg { width: 20px; height: 20px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-overlay { transition: none; }
+}
+
+/* ---------------- Przelacznik jezyka (rozwijana lista) ---------------- */
+
+.lang-switcher {
+  position: relative;
+  font-size: 13px;
+}
+
+.lang-switcher summary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: 8px;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.lang-switcher summary::-webkit-details-marker { display: none; }
+
+.lang-switcher summary::after {
+  content: "▾";
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+.lang-switcher summary:hover {
+  background: var(--paper-dim);
+}
+
+.lang-switcher[open] summary::after {
+  content: "▴";
+}
+
+.lang-switcher-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  background: #fff;
+  border: var(--stroke) solid var(--line-soft);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.lang-switcher-menu a {
+  padding: 8px 12px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.lang-switcher-menu a:hover {
+  background: var(--paper-dim);
+}
+
+.lang-switcher-menu a.active {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.header-row-with-lang {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 480px) {
+  .lang-switcher { font-size: 12px; }
+}
