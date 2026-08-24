@@ -1,0 +1,59 @@
+/* Dodatki dla serii Kosmos. Ladowany TYLKO przez kosmos/ i space/,
+   po style.css. Karty uzywaja tych samych klas bird-* co ptaki, wiec
+   tutaj sa wylacznie dwa elementy, ktorych ptaki nie maja:
+   pelne zdanie ciekawostki i jednolinijkowy opis nagrania.
+   Nic w style.css nie jest nadpisywane. */
+
+.space-card-fact {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 2px 0 6px;
+  /* Zdania maja rozna dlugosc, a karty stoja w siatce - bez tego
+     ograniczenia rzedy rozjezdzaja sie na roznej wysokosci.
+     Cztery linie mieszcza najdluzsza ciekawostke z zestawu. */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.space-card-sound {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 11.5px;
+  line-height: 1.2;
+  color: var(--accent-blue);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.space-card-sound::before {
+  content: '';
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  /* ikona glosnika, zeby bylo widac ze to opis DZWIEKU, nie podtytul */
+  -webkit-mask: var(--ikona-glosnika) center / contain no-repeat;
+  mask: var(--ikona-glosnika) center / contain no-repeat;
+}
+
+:root {
+  --ikona-glosnika: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z'/%3E%3C/svg%3E");
+}
+
+/* Na waskich ekranach karta jest szersza wzgledem tekstu, wiec
+   ciekawostka moze dostac wiecej miejsca bez psucia siatki. */
+@media (max-width: 560px) {
+  .space-card-fact { -webkit-line-clamp: 6; line-clamp: 6; }
+}
