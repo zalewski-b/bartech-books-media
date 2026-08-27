@@ -3,46 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kto się chowa? — Bartech Books</title>
-<meta name="description" content="Dotknij nagrobka, drzewa albo dyni i zobacz, kto się za nim chowa. Zabawa do kolorowanki halloweenowej Bartech Books.">
+<meta name="description" content="Trzy darmowe gry z potworkami z halloweenowej kolorowanki Bartech Books: szukanie, ucieczka duszka i pary potworkow.">
 <link rel="icon" type="image/png" href="../assets/images/favicon-32.png">
+<title>Nocne igraszki</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Baloo+2:wght@500;600;800&display=swap">
 
 <style>
 /* ---------------------------------------------------------------------------
-   Kto Się Chowa, prototyp sceny do kolorowanki halloweenowej Bartech Books.
+   Trzy gry do kolorowanki halloweenowej Bartech Books.
+   Jedna strona, wspolne zasoby graficzne, trzy rozne odruchy:
+   szukanie, refleks, pamiec.
 
-   DECYZJA O MOTYWIE: to jest scena nocna i zostaje ciemna w obu motywach
-   przeglądarki. Świadomy wybór, nie przeoczenie. Dlatego nie ma bloku
-   prefers-color-scheme, ale każdy kolor i tło są ustawione jawnie, żeby
-   strona trzymała się na dowolnym podłożu gospodarza.
+   MOTYW: scena nocna, strona zostaje ciemna w obu motywach przegladarki.
+   Swiadomy wybor. Kazdy kolor i tlo ustawione jawnie.
    --------------------------------------------------------------------------- */
 :root {
   --niebo-szczyt: #0a1024;
-  --niebo-srodek: #1d2f57;
-  --niebo-horyzont: #3f5f8c;
-  --fiolet:        #4a2f6e;
   --ksiezyc:       #e2f0ff;
   --poswiata:      #93c2e6;
-  --cien:          #060912;   /* prawie czerń z niebieskim odchyleniem */
-  --cien-miekki:   #101a30;
+  --cien:          #060912;
   --dynia:         #ff8a1f;
   --okno:          #ffcb45;
   --mieta:         #8ef0c0;
-  --kosc:          #eef3f7;
   --tekst:         #e8eefb;
   --tekst-cichy:   #9fb2d0;
   --panel:         #0d1526;
   --panel-krawedz: #24365a;
-
   --font-display: 'Creepster', 'Baloo 2', system-ui, sans-serif;
   --font-body: 'Baloo 2', system-ui, -apple-system, sans-serif;
 }
-
 * { box-sizing: border-box; }
-
 body {
   margin: 0;
   background: var(--niebo-szczyt);
@@ -52,267 +44,160 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
+.otoczka { max-width: 1000px; margin: 0 auto; padding-bottom: 26px; }
 
 .pasek {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 12px 16px 4px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 16px 4px;
 }
-.pasek-marka {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--tekst);
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 15px;
-}
+.pasek-marka { display: inline-flex; align-items: center; gap: 8px; color: var(--tekst);
+  text-decoration: none; font-weight: 800; font-size: 15px; }
 .pasek-marka img { border-radius: 6px; }
-.pasek-powrot {
-  color: var(--tekst-cichy);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 14px;
-}
+.pasek-powrot { color: var(--tekst-cichy); text-decoration: none; font-weight: 700; font-size: 14px; }
 .pasek-powrot:hover, .pasek-marka:hover { color: var(--mieta); }
 .pasek a:focus-visible { outline: 2px solid var(--mieta); outline-offset: 3px; border-radius: 6px; }
 
-.stopka-gry {
-  margin: 0 10px 10px;
-  text-align: center;
-  color: #6d81a3;
-  font-size: 12.5px;
-}
-
-.gra {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* --- pasek celu ---------------------------------------------------------- */
-.cel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 16px 10px;
-  text-align: center;
-}
-.cel-znak {
+.tytul-strony {
   font-family: var(--font-display);
-  font-size: clamp(26px, 7vw, 44px);
-  letter-spacing: 0.04em;
+  font-size: clamp(30px, 8vw, 52px);
   color: var(--dynia);
-  text-shadow: 0 0 22px rgba(255, 138, 31, 0.45);
-  line-height: 1;
+  text-align: center;
+  letter-spacing: .04em;
+  margin: 6px 0 2px;
+  text-shadow: 0 0 24px rgba(255, 138, 31, .42);
 }
-.cel-podpis {
-  font-size: clamp(13px, 3.4vw, 16px);
-  color: var(--tekst-cichy);
-  max-width: 46ch;
-  text-wrap: balance;
-}
+.podtytul { text-align: center; color: var(--tekst-cichy); margin: 0 16px 14px;
+  font-size: clamp(13px, 3.4vw, 16px); }
 
-/* --- scena --------------------------------------------------------------- */
-.scena-ramka {
-  position: relative;
-  margin: 0 10px;
-  border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid var(--panel-krawedz);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+/* --- przelacznik gier ----------------------------------------------------- */
+.zakladki { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 10px 14px; }
+.zakladka {
+  font-family: var(--font-body); font-weight: 800; font-size: clamp(13px, 3.3vw, 16px);
+  color: var(--tekst); background: var(--panel);
+  border: 1px solid var(--panel-krawedz); border-radius: 14px;
+  padding: 11px 8px; cursor: pointer; min-height: 52px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.zakladka span { font-size: 11px; font-weight: 600; color: var(--tekst-cichy); }
+.zakladka:hover { border-color: var(--poswiata); }
+.zakladka:focus-visible { outline: 2px solid var(--mieta); outline-offset: 2px; }
+.zakladka[aria-selected="true"] {
+  background: linear-gradient(180deg, #ffa63d, var(--dynia));
+  color: #2a1400; border-color: transparent; transform: translateY(-2px);
+}
+.zakladka[aria-selected="true"] span { color: #5a3000; }
+
+.gra { display: none; }
+.gra.aktywna { display: block; }
+
+/* --- wspolne --------------------------------------------------------------- */
+.ramka {
+  position: relative; margin: 0 10px; border-radius: 18px; overflow: hidden;
+  border: 1px solid var(--panel-krawedz); box-shadow: 0 18px 50px rgba(0,0,0,.55);
   background: var(--niebo-szczyt);
 }
-.chmurka {
-  position: absolute;
-  left: 50%;
-  top: 10px;
-  transform: translate(-50%, -8px);
-  background: rgba(6, 12, 26, .88);
-  border: 1px solid var(--mieta);
-  color: var(--mieta);
-  font-weight: 800;
-  font-size: clamp(15px, 4vw, 20px);
-  padding: 7px 18px;
-  border-radius: 999px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .2s ease, transform .3s cubic-bezier(.2,1.6,.4,1);
-  z-index: 3;
-  white-space: nowrap;
+.panel {
+  margin: 12px 10px 0; padding: 14px 16px; background: var(--panel);
+  border: 1px solid var(--panel-krawedz); border-radius: 18px;
+  display: flex; flex-direction: column; gap: 12px;
 }
-.chmurka.widoczna { opacity: 1; transform: translate(-50%, 0); }
+.licznik { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.licznik-tekst { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.licznik-tekst b { color: var(--dynia); font-weight: 800; }
+.sterowanie { display: flex; gap: 8px; flex-wrap: wrap; }
+.przycisk {
+  flex: 1 1 120px; font-family: var(--font-body); font-weight: 700; font-size: 15px;
+  color: var(--tekst); background: transparent; border: 1px solid var(--panel-krawedz);
+  border-radius: 999px; padding: 11px 14px; cursor: pointer; min-height: 44px;
+  transition: background .18s ease, border-color .18s ease;
+}
+.przycisk:hover { background: #16233c; border-color: var(--poswiata); }
+.przycisk:focus-visible { outline: 2px solid var(--mieta); outline-offset: 2px; }
+.przycisk.glowny { background: linear-gradient(180deg, #ffa63d, var(--dynia)); color: #2a1400; border-color: transparent; }
+.komunikat {
+  margin: 0; padding: 10px 12px; border-radius: 12px; text-align: center;
+  font-weight: 800; font-size: 15px; color: #2a1400;
+  background: linear-gradient(180deg, #ffa63d, var(--dynia));
+  display: none;
+}
+.komunikat.widoczny { display: block; }
+.nota { margin: 14px 10px 0; color: #6d81a3; font-size: 12.5px; text-align: center; line-height: 1.5; }
 
+/* --- gra 1: kryjowki ------------------------------------------------------- */
 .scena { display: block; width: 100%; height: auto; touch-action: manipulation; }
-
 .kryjowka { cursor: pointer; outline: none; }
 .kryjowka .strefa { fill: transparent; }
 .kryjowka .bryla { transition: transform .18s ease; transform-box: fill-box; transform-origin: center bottom; }
-.kryjowka:focus-visible .strefa {
-  fill: rgba(142, 240, 192, 0.14);
-  stroke: var(--mieta);
-  stroke-width: 3;
-  stroke-dasharray: 8 8;
-}
+.kryjowka:focus-visible .strefa { fill: rgba(142,240,192,.14); stroke: var(--mieta); stroke-width: 3; stroke-dasharray: 8 8; }
 .kryjowka.puka .bryla { animation: puka .55s ease-in-out; }
 .kryjowka.podpowiedz .bryla { animation: puka 1.1s ease-in-out infinite; }
-@keyframes puka {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-3.5deg); }
-  75% { transform: rotate(3.5deg); }
-}
-
-/* potworek startuje schowany dokładnie za bryłą i wysuwa się na swoją pozycję */
+@keyframes puka { 0%,100% { transform: rotate(0deg);} 25% { transform: rotate(-3.5deg);} 75% { transform: rotate(3.5deg);} }
 .potworek { pointer-events: none; }
 .wysuw {
-  opacity: 0;
-  transform: translate(0, 6px) scale(.3);
-  transform-box: fill-box;
-  transform-origin: center bottom;
-  transition: transform .62s cubic-bezier(.2, 1.5, .4, 1), opacity .22s ease;
+  opacity: 0; transform: translate(0, 6px) scale(.3);
+  transform-box: fill-box; transform-origin: center bottom;
+  transition: transform .62s cubic-bezier(.2,1.5,.4,1), opacity .22s ease;
 }
-.potworek.znaleziony .wysuw {
-  opacity: 1;
-  transform: translate(var(--dx), var(--dy)) scale(1);
-}
+.potworek.znaleziony .wysuw { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1); }
 .potworek.znaleziony .dygot { animation: dygot 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
-@keyframes dygot {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
-}
-
-.metka { opacity: 0; transition: opacity .3s ease .45s; }
-.potworek.znaleziony .metka { opacity: 1; }
-.metka text {
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 27px;
-  fill: var(--mieta);
-  text-anchor: middle;
-  paint-order: stroke;
-  stroke: #050810;
-  stroke-width: 7px;
-  stroke-linejoin: round;
-}
-
+@keyframes dygot { 0%,100% { transform: translateY(0) rotate(0deg);} 50% { transform: translateY(-6px) rotate(2deg);} }
 .blysk { opacity: 0; }
 .potworek.znaleziony .blysk { animation: blysk .8s ease-out; }
-@keyframes blysk {
-  0% { opacity: .85; transform: scale(.2); }
-  100% { opacity: 0; transform: scale(2.4); }
+@keyframes blysk { 0% { opacity:.85; transform: scale(.2);} 100% { opacity:0; transform: scale(2.4);} }
+.chmurka {
+  position: absolute; left: 50%; top: 10px; transform: translate(-50%,-8px);
+  background: rgba(6,12,26,.88); border: 1px solid var(--mieta); color: var(--mieta);
+  font-weight: 800; font-size: clamp(15px,4vw,20px); padding: 7px 18px; border-radius: 999px;
+  pointer-events: none; opacity: 0; transition: opacity .2s ease, transform .3s cubic-bezier(.2,1.6,.4,1);
+  z-index: 3; white-space: nowrap;
 }
-
-.nietoperz { animation: przelot linear infinite; }
-@keyframes przelot {
-  from { transform: translate(-140px, 0); }
-  to { transform: translate(1360px, -60px); }
-}
-.skrzydlo { animation: macha .42s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
-@keyframes macha { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
-
-.oddech { animation: oddech 7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-@keyframes oddech { 0%, 100% { opacity: .55; } 50% { opacity: .85; } }
-
-/* --- panel --------------------------------------------------------------- */
-.panel {
-  margin: 12px 10px 18px;
-  padding: 14px 16px;
-  background: var(--panel);
-  border: 1px solid var(--panel-krawedz);
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.licznik {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-.licznik-tekst { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.licznik-tekst b { color: var(--dynia); font-weight: 800; }
-
+.chmurka.widoczna { opacity: 1; transform: translate(-50%, 0); }
 .slot-rzad { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
-.slot {
-  aspect-ratio: 1;
-  min-width: 0;
-  border-radius: 12px;
-  background: #0a1020;
-  border: 1px dashed var(--panel-krawedz);
-  display: grid;
-  place-items: center;
-  transition: background .3s ease, border-color .3s ease, transform .3s cubic-bezier(.2,1.6,.4,1);
-}
-.slot img { width: 76%; height: 76%; object-fit: contain; opacity: .18; filter: grayscale(1); transition: opacity .3s ease, filter .3s ease; }
-.slot.pelny {
-  background: #14243d;
-  border: 1px solid var(--mieta);
-  border-style: solid;
-  transform: translateY(-3px);
-}
+.slot { aspect-ratio: 1; min-width: 0; border-radius: 12px; background: #0a1020;
+  border: 1px dashed var(--panel-krawedz); display: grid; place-items: center;
+  transition: background .3s ease, border-color .3s ease, transform .3s cubic-bezier(.2,1.6,.4,1); }
+.slot img { width: 76%; height: 76%; object-fit: contain; opacity: .18; filter: grayscale(1);
+  transition: opacity .3s ease, filter .3s ease; }
+.slot.pelny { background: #14243d; border: 1px solid var(--mieta); border-style: solid; transform: translateY(-3px); }
 .slot.pelny img { opacity: 1; filter: none; }
 
-.sterowanie { display: flex; gap: 8px; }
-.przycisk {
-  flex: 1;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--tekst);
-  background: transparent;
-  border: 1px solid var(--panel-krawedz);
-  border-radius: 999px;
-  padding: 11px 14px;
-  cursor: pointer;
-  min-height: 44px;
-  transition: background .18s ease, border-color .18s ease;
+/* --- gra 2: ucieczka ------------------------------------------------------- */
+#plotno { display: block; width: 100%; height: auto; touch-action: manipulation; cursor: pointer; }
+.nakladka {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: 10px;
+  text-align: center; background: rgba(5,9,20,.72); backdrop-filter: blur(2px);
+  z-index: 2; padding: 20px;
 }
-.przycisk:hover, .przycisk:focus-visible { background: #16233c; border-color: var(--poswiata); }
-.przycisk:focus-visible { outline: 2px solid var(--mieta); outline-offset: 2px; }
-.przycisk.glowny {
-  background: linear-gradient(180deg, #ffa63d, var(--dynia));
-  color: #2a1400;
-  border-color: transparent;
-}
-.przycisk.glowny:hover, .przycisk.glowny:focus-visible { background: linear-gradient(180deg, #ffb85c, #ff9530); }
+.nakladka.ukryta { display: none; }
+.nakladka h3 { font-family: var(--font-display); font-size: clamp(26px,7vw,42px);
+  color: var(--dynia); margin: 0; letter-spacing: .04em; }
+.nakladka p { margin: 0; color: var(--tekst); font-size: clamp(14px,3.6vw,17px); }
+.nakladka .wynik { color: var(--mieta); font-weight: 800; font-size: clamp(18px,5vw,24px); }
 
-.finisz {
-  display: none;
-  text-align: center;
-  padding: 4px 0 2px;
+/* --- gra 3: pary ----------------------------------------------------------- */
+.plansza { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; }
+.karta { position: relative; display: block; aspect-ratio: 3/4; perspective: 700px;
+  background: none; border: 0; padding: 0; cursor: pointer; }
+.karta-w { position: absolute; inset: 0; transform-style: preserve-3d;
+  transition: transform .42s cubic-bezier(.2,1.3,.4,1); }
+.karta.odkryta .karta-w, .karta.dopasowana .karta-w { transform: rotateY(180deg); }
+.karta-przod, .karta-tyl {
+  position: absolute; inset: 0; border-radius: 12px; backface-visibility: hidden;
+  display: grid; place-items: center; border: 1px solid var(--panel-krawedz);
 }
-.finisz.widoczny { display: block; }
-.finisz-tytul {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 6vw, 34px);
-  color: var(--mieta);
-  letter-spacing: .04em;
-  text-shadow: 0 0 20px rgba(142, 240, 192, .4);
-}
-.finisz p { margin: 2px 0 0; color: var(--tekst-cichy); font-size: 15px; }
-
-.nota {
-  margin: 0 10px 22px;
-  color: #6d81a3;
-  font-size: 12.5px;
-  text-align: center;
-  line-height: 1.5;
-}
+.karta-przod { background: linear-gradient(160deg, #1b2a4a, #0d1526); }
+.karta-przod::after { content: ''; width: 42%; height: 42%; background: var(--dynia);
+  opacity: .30; border-radius: 50%; filter: blur(1px); }
+.karta-tyl { background: #14243d; transform: rotateY(180deg); }
+.karta-tyl img { width: 78%; height: 78%; object-fit: contain; }
+.karta.dopasowana .karta-tyl { border-color: var(--mieta); background: #16304a; }
+.karta:focus-visible { outline: 2px solid var(--mieta); outline-offset: 3px; border-radius: 14px; }
+.karta[disabled] { cursor: default; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .12s !important;
-  }
+  .karta-w, .wysuw, .slot { transition-duration: .12s !important; }
+  .potworek.znaleziony .dygot, .kryjowka.podpowiedz .bryla { animation: none !important; }
 }
 </style>
 
@@ -327,18 +212,26 @@ body {
   <a class="pasek-powrot" href="../index.html">← Wszystkie kategorie</a>
 </header>
 
-<div class="gra">
+<div class="otoczka">
 
-  <header class="cel">
-    <div>
-      <div class="cel-znak">Kto się chowa?</div>
-      <p class="cel-podpis" id="podpis">Dotknij bramy, nagrobka, drzewa albo dyni. Za każdym ktoś siedzi.</p>
-    </div>
-  </header>
+  <h1 class="tytul-strony">Nocne igraszki</h1>
+  <p class="podtytul" id="podtytul">Trzy zabawy z potworkami z Twojej kolorowanki. Wybierz jedną.</p>
 
-  <div class="scena-ramka">
-    <div class="chmurka" id="chmurka" aria-live="polite"></div>
-    <svg class="scena" viewBox="0 0 1600 1073" role="img" aria-label="Nocny cmentarz: brama, nagrobki, drzewo, latarnia i dynia">
+  <div class="zakladki" role="tablist" aria-label="Wybór gry">
+    <button class="zakladka" role="tab" id="tab-kryjowki" aria-controls="gra-kryjowki" aria-selected="true" type="button">
+      Kto się chowa<span>szukanie</span></button>
+    <button class="zakladka" role="tab" id="tab-ucieczka" aria-controls="gra-ucieczka" aria-selected="false" type="button">
+      Ucieczka duszka<span>refleks</span></button>
+    <button class="zakladka" role="tab" id="tab-pary" aria-controls="gra-pary" aria-selected="false" type="button">
+      Pary potworków<span>pamięć</span></button>
+  </div>
+
+  <!-- ================= GRA 1: KRYJOWKI ================= -->
+  <section class="gra aktywna" id="gra-kryjowki" role="tabpanel" aria-labelledby="tab-kryjowki">
+    <div class="ramka">
+      <div class="chmurka" id="chmurka" aria-live="polite"></div>
+      <svg class="scena" viewBox="0 0 1600 1073" role="img"
+           aria-label="Nocny cmentarz: brama, nagrobki, drzewo, latarnia i dynia">
       <image href="../images/halloween/tlo.webp" x="0" y="0" width="1600" height="1073" preserveAspectRatio="xMidYMid slice"/>
 
       <g class="potworek" id="p-brama" style="--dx:-140px; --dy:-28px;">
@@ -349,7 +242,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="brama" data-nazwa="Duszek" role="button" tabindex="0" aria-label="Brama cmentarna. Sprawdź, kto się za nią chowa">
+      <g class="kryjowka" data-id="brama" data-nazwa="Duszek" data-potworek="duszek" role="button" tabindex="0" aria-label="Brama cmentarna. Sprawdź, kto się za nią chowa">
         <rect class="strefa" x="145" y="584" width="310" height="290"/>
         <g class="bryla">
           <image href="../images/halloween/brama.webp" x="165.1" y="603.6" width="269.7" height="250"/>
@@ -364,7 +257,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="nagrobek" data-nazwa="Pajączek" role="button" tabindex="0" aria-label="Nagrobek. Sprawdź, kto się za nim chowa">
+      <g class="kryjowka" data-id="nagrobek" data-nazwa="Pajączek" data-potworek="pajaczek" role="button" tabindex="0" aria-label="Nagrobek. Sprawdź, kto się za nim chowa">
         <rect class="strefa" x="368" y="647" width="205" height="230"/>
         <g class="bryla">
           <image href="../images/halloween/nagrobek.webp" x="401.1" y="666.8" width="137.8" height="190"/>
@@ -379,7 +272,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="krzyz" data-nazwa="Kotek" role="button" tabindex="0" aria-label="Kamienny krzyż. Sprawdź, kto się za nim chowa">
+      <g class="kryjowka" data-id="krzyz" data-nazwa="Kotek" data-potworek="kotek" role="button" tabindex="0" aria-label="Kamienny krzyż. Sprawdź, kto się za nim chowa">
         <rect class="strefa" x="538" y="630" width="205" height="250"/>
         <g class="bryla">
           <image href="../images/halloween/krzyz.webp" x="565.9" y="650.0" width="148.2" height="210"/>
@@ -394,7 +287,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="krypta" data-nazwa="Mumia" role="button" tabindex="0" aria-label="Grobowiec. Sprawdź, kto się za nim chowa">
+      <g class="kryjowka" data-id="krypta" data-nazwa="Mumia" data-potworek="mumia" role="button" tabindex="0" aria-label="Grobowiec. Sprawdź, kto się za nim chowa">
         <rect class="strefa" x="702" y="643" width="217" height="240"/>
         <g class="bryla">
           <image href="../images/halloween/krypta.webp" x="721.5" y="663.2" width="176.9" height="200"/>
@@ -409,7 +302,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="drzewo" data-nazwa="Wampirek" role="button" tabindex="0" aria-label="Uschłe drzewo. Sprawdź, kto się za nim chowa">
+      <g class="kryjowka" data-id="drzewo" data-nazwa="Wampirek" data-potworek="wampirek" role="button" tabindex="0" aria-label="Uschłe drzewo. Sprawdź, kto się za nim chowa">
         <rect class="strefa" x="815" y="497" width="350" height="390"/>
         <g class="bryla">
           <image href="../images/halloween/drzewo.webp" x="835.2" y="516.6" width="309.6" height="350"/>
@@ -424,7 +317,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="glaz" data-nazwa="Jednooki" role="button" tabindex="0" aria-label="Głaz. Sprawdź, kto się za nim chowa">
+      <g class="kryjowka" data-id="glaz" data-nazwa="Jednooki" data-potworek="jednooki" role="button" tabindex="0" aria-label="Głaz. Sprawdź, kto się za nim chowa">
         <rect class="strefa" x="1065" y="685" width="209" height="205"/>
         <g class="bryla">
           <image href="../images/halloween/glaz.webp" x="1085.4" y="734.9" width="169.2" height="135"/>
@@ -439,7 +332,7 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="latarnia" data-nazwa="Szkielecik" role="button" tabindex="0" aria-label="Latarnia. Sprawdź, kto się za nią chowa">
+      <g class="kryjowka" data-id="latarnia" data-nazwa="Szkielecik" data-potworek="szkielecik" role="button" tabindex="0" aria-label="Latarnia. Sprawdź, kto się za nią chowa">
         <rect class="strefa" x="1242" y="563" width="205" height="330"/>
         <g class="bryla">
           <image href="../images/halloween/latarnia.webp" x="1302.9" y="583.2" width="84.2" height="290"/>
@@ -454,293 +347,506 @@ body {
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="dynia" data-nazwa="Wilkołaczek" role="button" tabindex="0" aria-label="Dynia. Sprawdź, kto się za nią chowa">
+      <g class="kryjowka" data-id="dynia" data-nazwa="Wilkołaczek" data-potworek="wilkolaczek" role="button" tabindex="0" aria-label="Dynia. Sprawdź, kto się za nią chowa">
         <rect class="strefa" x="1394" y="681" width="231" height="215"/>
         <g class="bryla">
           <image href="../images/halloween/dynia.webp" x="1414.4" y="701.3" width="191.2" height="175"/>
         </g>
       </g>
-    </svg>
-  </div>
-
-  <div class="panel">
-    <div class="licznik">
-      <span class="licznik-tekst">Znalezione: <b id="ile">0</b> z <b>8</b></span>
-      <span class="licznik-tekst" id="stan-podpowiedzi" style="color:var(--tekst-cichy); font-size:14px;"></span>
+      </svg>
     </div>
-
-    <div class="slot-rzad" id="sloty"></div>
-
-    <div class="finisz" id="finisz">
-      <div class="finisz-tytul">Wszystkie znalezione!</div>
-      <p>Osiem kryjówek na jednej scenie. W książce będzie pięć scen i czterdzieści kryjówek.</p>
+    <div class="panel">
+      <div class="licznik">
+        <span class="licznik-tekst">Znalezione: <b id="ile">0</b> z <b>8</b></span>
+        <span class="licznik-tekst" id="stan-podpowiedzi" style="color:var(--tekst-cichy); font-size:14px;"></span>
+      </div>
+      <div class="slot-rzad" id="sloty"></div>
+      <div class="sterowanie">
+        <button class="przycisk glowny" id="podpowiedz-btn" type="button">Podpowiedz</button>
+        <button class="przycisk" id="reset-btn" type="button">Od nowa</button>
+      </div>
     </div>
+  </section>
 
-    <div class="sterowanie">
-      <button class="przycisk glowny" id="podpowiedz-btn" type="button">Podpowiedz</button>
-      <button class="przycisk" id="dzwiek-btn" type="button" aria-pressed="true">Dźwięk: włączony</button>
-      <button class="przycisk" id="reset-btn" type="button">Od nowa</button>
+  <!-- ================= GRA 2: UCIECZKA ================= -->
+  <section class="gra" id="gra-ucieczka" role="tabpanel" aria-labelledby="tab-ucieczka">
+    <div class="ramka">
+      <canvas id="plotno" width="900" height="340" role="img"
+              aria-label="Duszek ucieka przez cmentarz, przeskakuj nagrobki"></canvas>
+      <div class="nakladka" id="nakladka">
+        <h3 id="nakladka-tytul">Ucieczka duszka</h3>
+        <p id="nakladka-tekst">Dotknij ekranu albo naciśnij spację, żeby podskoczyć.</p>
+        <p class="wynik" id="nakladka-wynik"></p>
+        <button class="przycisk glowny" id="start-btn" type="button" style="flex:0 0 auto; padding:12px 28px;">Start</button>
+      </div>
     </div>
-  </div>
+    <div class="panel">
+      <div class="licznik">
+        <span class="licznik-tekst">Wynik: <b id="wynik">0</b></span>
+        <span class="licznik-tekst">Najlepszy: <b id="rekord">0</b></span>
+      </div>
+      <div class="sterowanie">
+        <button class="przycisk glowny" id="skok-btn" type="button">Skok</button>
+        <button class="przycisk" id="reset-biegu" type="button">Od nowa</button>
+      </div>
+    </div>
+  </section>
 
-  <footer class="stopka-gry">
-    © 2026 Bartech Books · Zabawa do kolorowanki „Kto się chowa?"
-  </footer>
+  <!-- ================= GRA 3: PARY ================= -->
+  <section class="gra" id="gra-pary" role="tabpanel" aria-labelledby="tab-pary">
+    <div class="ramka">
+      <div class="plansza" id="plansza"></div>
+    </div>
+    <div class="panel">
+      <div class="licznik">
+        <span class="licznik-tekst">Pary: <b id="pary-ile">0</b> z <b>8</b></span>
+        <span class="licznik-tekst">Ruchy: <b id="ruchy">0</b></span>
+      </div>
+      <p class="komunikat" id="pary-komunikat" aria-live="polite"></p>
+      <div class="sterowanie">
+        <button class="przycisk glowny" id="pary-reset" type="button">Nowe rozdanie</button>
+      </div>
+    </div>
+  </section>
 
-  <p class="nota">
-    Scena pierwsza z pięciu: cmentarz. Postęp zapisuje się tylko w tej
-    przeglądarce, nie wysyłamy nigdzie żadnych danych.
+  <p class="nota" id="nota">
+    Postęp i najlepszy wynik zapisują się tylko w tej przeglądarce.
+    Nie wysyłamy nigdzie żadnych danych.
   </p>
 </div>
 
 <script>
-/* ---------------------------------------------------------------------------
-   Cała logika. Zero zależności, zero backendu, działa po zapisaniu strony
-   na dysk i bez zasięgu.
-   --------------------------------------------------------------------------- */
 (function () {
   'use strict';
 
-  var KLUCZ = 'bartech-halloween-cmentarz-v2';
-  var kryjowki = Array.prototype.slice.call(document.querySelectorAll('.kryjowka'));
-  var elIle = document.getElementById('ile');
-  var elSloty = document.getElementById('sloty');
-  var elFinisz = document.getElementById('finisz');
-  var elPodpis = document.getElementById('podpis');
-  var elStanPodpowiedzi = document.getElementById('stan-podpowiedzi');
-  var elChmurka = document.getElementById('chmurka');
-  var btnPodpowiedz = document.getElementById('podpowiedz-btn');
-  var btnDzwiek = document.getElementById('dzwiek-btn');
-  var btnReset = document.getElementById('reset-btn');
+  var OBRAZY = {
+    "tlo": "../images/halloween/tlo.webp",
+    "brama": "../images/halloween/brama.webp",
+    "nagrobek": "../images/halloween/nagrobek.webp",
+    "krzyz": "../images/halloween/krzyz.webp",
+    "krypta": "../images/halloween/krypta.webp",
+    "drzewo": "../images/halloween/drzewo.webp",
+    "glaz": "../images/halloween/glaz.webp",
+    "latarnia": "../images/halloween/latarnia.webp",
+    "dynia": "../images/halloween/dynia.webp",
+    "duszek": "../images/halloween/duszek.webp",
+    "pajaczek": "../images/halloween/pajaczek.webp",
+    "kotek": "../images/halloween/kotek.webp",
+    "mumia": "../images/halloween/mumia.webp",
+    "wampirek": "../images/halloween/wampirek.webp",
+    "jednooki": "../images/halloween/jednooki.webp",
+    "szkielecik": "../images/halloween/szkielecik.webp",
+    "wilkolaczek": "../images/halloween/wilkolaczek.webp"
+  };
+  var POTWORY = ["duszek", "pajaczek", "kotek", "mumia", "wampirek", "jednooki", "szkielecik", "wilkolaczek"];
 
-  var znalezione = wczytaj();
-  var dzwiekWlaczony = true;
-  var audio = null;
-  var licznikBezczynnosci = null;
-
-  /* --- zapis stanu ------------------------------------------------------- */
-  function wczytaj() {
+  /* ====================== wspolne ====================== */
+  function zapisz(klucz, wartosc) {
+    try { localStorage.setItem(klucz, JSON.stringify(wartosc)); } catch (e) { /* tryb prywatny */ }
+  }
+  function wczytaj(klucz, domyslne) {
     try {
-      var s = window.localStorage.getItem(KLUCZ);
-      return s ? JSON.parse(s) : [];
-    } catch (e) {
-      return [];   // tryb prywatny albo zablokowane dane witryny
-    }
-  }
-  function zapisz() {
-    try { window.localStorage.setItem(KLUCZ, JSON.stringify(znalezione)); } catch (e) { /* nie szkodzi */ }
+      var s = localStorage.getItem(klucz);
+      return s === null ? domyslne : JSON.parse(s);
+    } catch (e) { return domyslne; }
   }
 
-  /* --- dźwięk, syntezowany, bez plików ----------------------------------- */
-  function kontekst() {
-    if (!audio) {
+  var audio = null;
+  function dzwiek(typ) {
+    try {
       var AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      audio = new AC();
-    }
-    if (audio.state === 'suspended') audio.resume();
-    return audio;
-  }
-  function zagraj(typ) {
-    if (!dzwiekWlaczony) return;
-    var ac = kontekst();
-    if (!ac) return;
-    var t = ac.currentTime;
-    var osc = ac.createOscillator();
-    var wzm = ac.createGain();
-    osc.connect(wzm); wzm.connect(ac.destination);
-    if (typ === 'znalazl') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(320, t);
-      osc.frequency.exponentialRampToValueAtTime(760, t + 0.16);
-      wzm.gain.setValueAtTime(0.0001, t);
-      wzm.gain.exponentialRampToValueAtTime(0.16, t + 0.02);
-      wzm.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
-      osc.start(t); osc.stop(t + 0.45);
-    } else if (typ === 'pusto') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(180, t);
-      osc.frequency.exponentialRampToValueAtTime(120, t + 0.12);
-      wzm.gain.setValueAtTime(0.0001, t);
-      wzm.gain.exponentialRampToValueAtTime(0.07, t + 0.02);
-      wzm.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
-      osc.start(t); osc.stop(t + 0.22);
-    } else if (typ === 'finisz') {
-      [523, 659, 784, 1047].forEach(function (f, i) {
-        var o = ac.createOscillator(), g = ac.createGain();
-        o.connect(g); g.connect(ac.destination);
-        o.type = 'triangle';
-        o.frequency.setValueAtTime(f, t + i * 0.11);
-        g.gain.setValueAtTime(0.0001, t + i * 0.11);
-        g.gain.exponentialRampToValueAtTime(0.13, t + i * 0.11 + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.11 + 0.34);
-        o.start(t + i * 0.11); o.stop(t + i * 0.11 + 0.36);
-      });
-      osc.disconnect();
-    }
+      if (!AC) return;
+      if (!audio) audio = new AC();
+      if (audio.state === 'suspended') audio.resume();
+      var t = audio.currentTime, o = audio.createOscillator(), g = audio.createGain();
+      o.connect(g); g.connect(audio.destination);
+      var barwy = {
+        dobrze: ['triangle', 320, 760, .16, .42],
+        pudlo:  ['sine',     180, 120, .07, .20],
+        skok:   ['square',   420, 700, .05, .12],
+        koniec: ['sawtooth', 300, 90,  .10, .55]
+      };
+      var b = barwy[typ] || barwy.dobrze;
+      o.type = b[0];
+      o.frequency.setValueAtTime(b[1], t);
+      o.frequency.exponentialRampToValueAtTime(b[2], t + b[4] * .6);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(b[3], t + .02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + b[4]);
+      o.start(t); o.stop(t + b[4] + .02);
+    } catch (e) { /* dzwiek jest dodatkiem, nigdy nie blokuje gry */ }
   }
 
-  /* --- sloty na dole ------------------------------------------------------ */
-  var IKONY = [
-  { id: "brama", nazwa: "Duszek", ikona: "../images/halloween/duszek.webp" },
-  { id: "nagrobek", nazwa: "Pajączek", ikona: "../images/halloween/pajaczek.webp" },
-  { id: "krzyz", nazwa: "Kotek", ikona: "../images/halloween/kotek.webp" },
-  { id: "krypta", nazwa: "Mumia", ikona: "../images/halloween/mumia.webp" },
-  { id: "drzewo", nazwa: "Wampirek", ikona: "../images/halloween/wampirek.webp" },
-  { id: "glaz", nazwa: "Jednooki", ikona: "../images/halloween/jednooki.webp" },
-  { id: "latarnia", nazwa: "Szkielecik", ikona: "../images/halloween/szkielecik.webp" },
-  { id: "dynia", nazwa: "Wilkołaczek", ikona: "../images/halloween/wilkolaczek.webp" }
-  ];
-
-  function zbudujSloty() {
-    elSloty.innerHTML = '';
-    IKONY.forEach(function (poz) {
-      var d = document.createElement('div');
-      d.className = 'slot';
-      d.id = 'slot-' + poz.id;
-      d.title = poz.nazwa;
-      var img = document.createElement('img');
-      img.src = poz.ikona;
-      img.alt = '';
-      img.setAttribute('aria-hidden', 'true');
-      d.appendChild(img);
-      elSloty.appendChild(d);
+  /* ====================== zakladki ====================== */
+  var zakladki = [].slice.call(document.querySelectorAll('.zakladka'));
+  function pokazGre(idZakladki) {
+    zakladki.forEach(function (z) {
+      var wybrana = z.id === idZakladki;
+      z.setAttribute('aria-selected', String(wybrana));
+      document.getElementById(z.getAttribute('aria-controls'))
+        .classList.toggle('aktywna', wybrana);
     });
+    if (idZakladki === 'tab-ucieczka') przygotujBieg();
   }
-
-  /* --- odsłanianie -------------------------------------------------------- */
-  function odslon(k, zDzwiekiem) {
-    var id = k.dataset.id;
-    var potworek = document.getElementById('p-' + id);
-    potworek.classList.add('znaleziony');
-    var slot = document.getElementById('slot-' + id);
-    if (slot) slot.classList.add('pelny');
-    k.setAttribute('aria-label', k.dataset.nazwa + ', znaleziony');
-    if (zDzwiekiem) {
-      zagraj('znalazl');
-      pokazChmurke(k.dataset.nazwa);
-    }
-  }
-
-  var licznikChmurki = null;
-  function pokazChmurke(tekst) {
-    elChmurka.textContent = tekst;
-    elChmurka.classList.add('widoczna');
-    clearTimeout(licznikChmurki);
-    licznikChmurki = setTimeout(function () {
-      elChmurka.classList.remove('widoczna');
-    }, 1800);
-  }
-
-  function klik(k) {
-    var id = k.dataset.id;
-    zatrzymajPodpowiedz();
-    if (znalezione.indexOf(id) !== -1) {
-      k.classList.remove('puka');
-      void k.offsetWidth;
-      k.classList.add('puka');
-      zagraj('pusto');
-      return;
-    }
-    znalezione.push(id);
-    zapisz();
-    odslon(k, true);
-    odswiez();
-    if (znalezione.length === kryjowki.length) {
-      elFinisz.classList.add('widoczny');
-      setTimeout(function () { zagraj('finisz'); }, 320);
-    } else {
-      startPodpowiedzi();
-    }
-  }
-
-  function odswiez() {
-    elIle.textContent = znalezione.length;
-    elFinisz.classList.toggle('widoczny', znalezione.length === kryjowki.length);
-  }
-
-  /* --- podpowiedź po bezczynności ---------------------------------------- */
-  function zatrzymajPodpowiedz() {
-    clearTimeout(licznikBezczynnosci);
-    elStanPodpowiedzi.textContent = '';
-    kryjowki.forEach(function (k) { k.classList.remove('podpowiedz'); });
-  }
-  function pokazPodpowiedz() {
-    var brakujace = kryjowki.filter(function (k) { return znalezione.indexOf(k.dataset.id) === -1; });
-    if (!brakujace.length) return;
-    var k = brakujace[0];
-    k.classList.add('podpowiedz');
-    elStanPodpowiedzi.textContent = 'Coś się rusza…';
-  }
-  function startPodpowiedzi() {
-    zatrzymajPodpowiedz();
-    licznikBezczynnosci = setTimeout(pokazPodpowiedz, 20000);
-  }
-
-  /* --- cel z adresu, jak przy kodach QR w książce ------------------------- */
-  function ustawCel() {
-    var slug = decodeURIComponent(window.location.hash.replace('#', '')).trim().toLowerCase();
-    if (!slug) return;
-    var k = kryjowki.filter(function (x) { return x.dataset.id === slug; })[0];
-    if (!k) return;
-    elPodpis.innerHTML = 'Ze strony z książki: znajdź <b style="color:var(--mieta)">' +
-      k.dataset.nazwa + '</b>. Reszta też tu jest.';
-    k.classList.add('podpowiedz');
-    setTimeout(function () { k.classList.remove('podpowiedz'); }, 3200);
-  }
-
-  /* --- start -------------------------------------------------------------- */
-  zbudujSloty();
-  znalezione = znalezione.filter(function (id) {
-    return kryjowki.some(function (k) { return k.dataset.id === id; });
-  });
-  znalezione.forEach(function (id) {
-    var k = kryjowki.filter(function (x) { return x.dataset.id === id; })[0];
-    if (k) odslon(k, false);
-  });
-  odswiez();
-  ustawCel();
-  startPodpowiedzi();
-
-  kryjowki.forEach(function (k) {
-    k.addEventListener('click', function () { klik(k); });
-    k.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault();
-        klik(k);
-      }
-    });
+  zakladki.forEach(function (z) {
+    z.addEventListener('click', function () { pokazGre(z.id); });
   });
 
-  btnPodpowiedz.addEventListener('click', function () {
-    zatrzymajPodpowiedz();
-    pokazPodpowiedz();
-    setTimeout(startPodpowiedzi, 3000);
-  });
+  /* ====================== GRA 1: kryjowki ====================== */
+  (function () {
+    var KLUCZ = 'bartech-halloween-kryjowki-v3';
+    var kryjowki = [].slice.call(document.querySelectorAll('.kryjowka'));
+    var elIle = document.getElementById('ile');
+    var elSloty = document.getElementById('sloty');
+    var elChmurka = document.getElementById('chmurka');
+    var elStan = document.getElementById('stan-podpowiedzi');
+    var znalezione = wczytaj(KLUCZ, []);
+    var timerPodpowiedzi = null, timerChmurki = null;
 
-  btnDzwiek.addEventListener('click', function () {
-    dzwiekWlaczony = !dzwiekWlaczony;
-    btnDzwiek.textContent = 'Dźwięk: ' + (dzwiekWlaczony ? 'włączony' : 'wyłączony');
-    btnDzwiek.setAttribute('aria-pressed', String(dzwiekWlaczony));
-    if (dzwiekWlaczony) zagraj('pusto');
-  });
-
-  btnReset.addEventListener('click', function () {
-    znalezione = [];
-    zapisz();
     kryjowki.forEach(function (k) {
-      document.getElementById('p-' + k.dataset.id).classList.remove('znaleziony');
-      var s = document.getElementById('slot-' + k.dataset.id);
-      if (s) s.classList.remove('pelny');
-      k.setAttribute('aria-label', k.getAttribute('aria-label').replace(', znaleziony', ''));
+      var d = document.createElement('div');
+      d.className = 'slot'; d.id = 'slot-' + k.dataset.id; d.title = k.dataset.nazwa;
+      var img = document.createElement('img');
+      img.src = OBRAZY[k.dataset.potworek]; img.alt = ''; img.setAttribute('aria-hidden', 'true');
+      d.appendChild(img); elSloty.appendChild(d);
     });
-    odswiez();
-    startPodpowiedzi();
-  });
 
-  window.addEventListener('hashchange', ustawCel);
+    function chmurka(tekst) {
+      elChmurka.textContent = tekst;
+      elChmurka.classList.add('widoczna');
+      clearTimeout(timerChmurki);
+      timerChmurki = setTimeout(function () { elChmurka.classList.remove('widoczna'); }, 1800);
+    }
+    function odslon(k, zEfektem) {
+      document.getElementById('p-' + k.dataset.id).classList.add('znaleziony');
+      var s = document.getElementById('slot-' + k.dataset.id);
+      if (s) s.classList.add('pelny');
+      if (zEfektem) { dzwiek('dobrze'); chmurka(k.dataset.nazwa); }
+    }
+    function odswiez() { elIle.textContent = znalezione.length; }
+    function stopPodpowiedz() {
+      clearTimeout(timerPodpowiedzi); elStan.textContent = '';
+      kryjowki.forEach(function (k) { k.classList.remove('podpowiedz'); });
+    }
+    function podpowiedz() {
+      var brak = kryjowki.filter(function (k) { return znalezione.indexOf(k.dataset.id) === -1; });
+      if (!brak.length) return;
+      brak[0].classList.add('podpowiedz');
+      elStan.textContent = 'Coś się rusza…';
+    }
+    function startPodpowiedzi() { stopPodpowiedz(); timerPodpowiedzi = setTimeout(podpowiedz, 20000); }
+
+    kryjowki.forEach(function (k) {
+      function klik() {
+        stopPodpowiedz();
+        if (znalezione.indexOf(k.dataset.id) !== -1) {
+          k.classList.remove('puka'); void k.offsetWidth; k.classList.add('puka');
+          dzwiek('pudlo'); return;
+        }
+        znalezione.push(k.dataset.id); zapisz(KLUCZ, znalezione);
+        odslon(k, true); odswiez();
+        if (znalezione.length < kryjowki.length) startPodpowiedzi();
+        else chmurka('Wszystkie znalezione!');
+      }
+      k.addEventListener('click', klik);
+      k.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); klik(); }
+      });
+    });
+
+    znalezione = znalezione.filter(function (id) {
+      return kryjowki.some(function (k) { return k.dataset.id === id; });
+    });
+    znalezione.forEach(function (id) {
+      var k = kryjowki.filter(function (x) { return x.dataset.id === id; })[0];
+      if (k) odslon(k, false);
+    });
+    odswiez(); startPodpowiedzi();
+
+    document.getElementById('podpowiedz-btn').addEventListener('click', function () {
+      stopPodpowiedz(); podpowiedz(); setTimeout(startPodpowiedzi, 3000);
+    });
+    document.getElementById('reset-btn').addEventListener('click', function () {
+      znalezione = []; zapisz(KLUCZ, znalezione);
+      kryjowki.forEach(function (k) {
+        document.getElementById('p-' + k.dataset.id).classList.remove('znaleziony');
+        var s = document.getElementById('slot-' + k.dataset.id);
+        if (s) s.classList.remove('pelny');
+      });
+      odswiez(); startPodpowiedzi();
+    });
+
+    /* Kod QR ze strony ksiazki: #nagrobek podswietla te jedna kryjowke. */
+    function zHasza() {
+      var slug = decodeURIComponent(location.hash.replace('#', '')).trim().toLowerCase();
+      if (!slug) return;
+      var k = kryjowki.filter(function (x) { return x.dataset.id === slug; })[0];
+      if (!k) return;
+      pokazGre('tab-kryjowki');
+      document.getElementById('podtytul').innerHTML =
+        'Ze strony z książki: znajdź <b style="color:var(--mieta)">' + k.dataset.nazwa + '</b>.';
+      k.classList.add('podpowiedz');
+      setTimeout(function () { k.classList.remove('podpowiedz'); }, 3200);
+    }
+    zHasza();
+    window.addEventListener('hashchange', zHasza);
+  })();
+
+  /* ====================== GRA 2: ucieczka ====================== */
+  var przygotujBieg;
+  (function () {
+    var KLUCZ = 'bartech-halloween-rekord-v1';
+    var plotno = document.getElementById('plotno');
+    var ctx = plotno.getContext('2d');
+    var SZER = plotno.width, WYS = plotno.height;
+    var ZIEMIA = 268;
+
+    var elWynik = document.getElementById('wynik');
+    var elRekord = document.getElementById('rekord');
+    var nakladka = document.getElementById('nakladka');
+    var nTytul = document.getElementById('nakladka-tytul');
+    var nTekst = document.getElementById('nakladka-tekst');
+    var nWynik = document.getElementById('nakladka-wynik');
+
+    var obrazy = {}, gotowe = false;
+    var PRZESZKODY = ['nagrobek', 'krzyz', 'glaz', 'dynia'];
+
+    function wczytajObrazy(gotoweCb) {
+      var lista = ['duszek', 'tlo'].concat(PRZESZKODY);
+      var zostalo = lista.length;
+      lista.forEach(function (n) {
+        var im = new Image();
+        im.onload = im.onerror = function () { if (--zostalo === 0) { gotowe = true; gotoweCb(); } };
+        im.src = OBRAZY[n];
+        obrazy[n] = im;
+      });
+    }
+
+    var stan = 'czeka';       // czeka | gra | koniec
+    var duszek, przeszkody, predkosc, dystans, ostatniaKlatka, doNastepnej;
+    var rekord = wczytaj(KLUCZ, 0);
+    elRekord.textContent = rekord;
+
+    var GRAWITACJA = 2400, SILA_SKOKU = -760;
+
+    function nowaGra() {
+      duszek = { x: 96, y: ZIEMIA, vy: 0, w: 58, h: 58, wPowietrzu: false };
+      przeszkody = []; predkosc = 300; dystans = 0;
+      doNastepnej = 420; ostatniaKlatka = 0;
+      elWynik.textContent = '0';
+    }
+
+    function skok() {
+      if (stan !== 'gra') { start(); return; }
+      if (!duszek.wPowietrzu) {
+        duszek.vy = SILA_SKOKU; duszek.wPowietrzu = true; dzwiek('skok');
+      }
+    }
+    function start() {
+      nowaGra(); stan = 'gra'; nakladka.classList.add('ukryta');
+      ostatniaKlatka = performance.now();
+      requestAnimationFrame(petla);
+    }
+    function koniec() {
+      stan = 'koniec'; dzwiek('koniec');
+      var w = Math.floor(dystans / 10);
+      if (w > rekord) { rekord = w; zapisz(KLUCZ, rekord); elRekord.textContent = rekord; }
+      nTytul.textContent = 'Złapany!';
+      nTekst.textContent = 'Duszek wpadł na przeszkodę.';
+      nWynik.textContent = 'Wynik: ' + w + '   Najlepszy: ' + rekord;
+      document.getElementById('start-btn').textContent = 'Jeszcze raz';
+      nakladka.classList.remove('ukryta');
+    }
+
+    function dodajPrzeszkode() {
+      var typ = PRZESZKODY[Math.floor(Math.random() * PRZESZKODY.length)];
+      var im = obrazy[typ];
+      var h = 52 + Math.random() * 26;
+      var w = im && im.height ? h * (im.width / im.height) : h;
+      przeszkody.push({ typ: typ, x: SZER + 40, w: w, h: h });
+    }
+
+    function rysujTlo() {
+      // Tlo rysujemy raz, bez kafelkowania: przy powtarzaniu na ekranie
+      // pojawialy sie dwa ksiezyce. Kadrujemy je tak, zeby linia horyzontu
+      // z obrazu (0,79 jego wysokosci) wypadla dokladnie na ZIEMIA.
+      var im = obrazy.tlo;
+      if (im && im.width) {
+        var skala = SZER / im.width;
+        var zrodloWys = ZIEMIA / skala;
+        // Odbicie w poziomie: nawiedzony dom jest w tle po lewej, a tam
+        // przez cala gre stoi duszek. Po odbiciu dom idzie w prawo i duszek
+        // ma nad soba czyste niebo.
+        ctx.save();
+        ctx.translate(SZER, 0); ctx.scale(-1, 1);
+        ctx.drawImage(im, 0, im.height * 0.79 - zrodloWys, im.width, zrodloWys,
+                          0, 0, SZER, ZIEMIA);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = '#16233f'; ctx.fillRect(0, 0, SZER, ZIEMIA);
+      }
+      // Ruch pokazuja uciekajace kreski na ziemi, nie przesuwanie tla.
+      ctx.fillStyle = '#050810';
+      ctx.fillRect(0, ZIEMIA, SZER, WYS - ZIEMIA);
+      ctx.strokeStyle = '#1b2c4e';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      var krok = 96;
+      for (var x = -(dystans % krok); x < SZER; x += krok) {
+        ctx.moveTo(x, ZIEMIA + 22); ctx.lineTo(x + 38, ZIEMIA + 22);
+      }
+      ctx.stroke();
+    }
+
+    function petla(teraz) {
+      if (stan !== 'gra') return;
+      var dt = Math.min((teraz - ostatniaKlatka) / 1000, 0.05);
+      ostatniaKlatka = teraz;
+
+      predkosc = Math.min(predkosc + 9 * dt, 620);
+      dystans += predkosc * dt;
+
+      duszek.vy += GRAWITACJA * dt;
+      duszek.y += duszek.vy * dt;
+      if (duszek.y >= ZIEMIA) { duszek.y = ZIEMIA; duszek.vy = 0; duszek.wPowietrzu = false; }
+
+      doNastepnej -= predkosc * dt;
+      if (doNastepnej <= 0) {
+        dodajPrzeszkode();
+        doNastepnej = 300 + Math.random() * 280 + predkosc * 0.35;
+      }
+      przeszkody.forEach(function (p) { p.x -= predkosc * dt; });
+      przeszkody = przeszkody.filter(function (p) { return p.x + p.w > -20; });
+
+      // kolizja z zapasem, zeby nie karac za musniecie rogu
+      var dx = duszek.x + 10, dy = duszek.y - duszek.h + 8,
+          dw = duszek.w - 20, dh = duszek.h - 12;
+      for (var i = 0; i < przeszkody.length; i++) {
+        var p = przeszkody[i];
+        var px = p.x + 6, py = ZIEMIA - p.h, pw = p.w - 12, ph = p.h;
+        if (dx < px + pw && dx + dw > px && dy < py + ph && dy + dh > py) { koniec(); return; }
+      }
+
+      rysujTlo();
+      przeszkody.forEach(function (p) {
+        var im = obrazy[p.typ];
+        if (im && im.width) ctx.drawImage(im, p.x, ZIEMIA - p.h, p.w, p.h);
+      });
+      var im = obrazy.duszek;
+      var bujanie = duszek.wPowietrzu ? 0 : Math.sin(dystans / 26) * 4;
+      if (im && im.width) ctx.drawImage(im, duszek.x, duszek.y - duszek.h + bujanie, duszek.w, duszek.h);
+
+      elWynik.textContent = Math.floor(dystans / 10);
+      requestAnimationFrame(petla);
+    }
+
+    przygotujBieg = function () {
+      if (!gotowe) { wczytajObrazy(function () { nowaGra(); rysujTlo(); }); return; }
+      if (stan === 'czeka') { nowaGra(); rysujTlo(); }
+    };
+
+    plotno.addEventListener('pointerdown', function (e) { e.preventDefault(); skok(); });
+    document.getElementById('skok-btn').addEventListener('click', skok);
+    document.getElementById('start-btn').addEventListener('click', start);
+    document.getElementById('reset-biegu').addEventListener('click', function () {
+      stan = 'czeka'; nowaGra(); rysujTlo();
+      nTytul.textContent = 'Ucieczka duszka';
+      nTekst.textContent = 'Dotknij ekranu albo naciśnij spację, żeby podskoczyć.';
+      nWynik.textContent = '';
+      document.getElementById('start-btn').textContent = 'Start';
+      nakladka.classList.remove('ukryta');
+    });
+    window.addEventListener('keydown', function (e) {
+      if (!document.getElementById('gra-ucieczka').classList.contains('aktywna')) return;
+      if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); skok(); }
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden && stan === 'gra') koniec();
+    });
+  })();
+
+  /* ====================== GRA 3: pary ====================== */
+  (function () {
+    var KLUCZ = 'bartech-halloween-pary-v1';
+    var plansza = document.getElementById('plansza');
+    var elPary = document.getElementById('pary-ile');
+    var elRuchy = document.getElementById('ruchy');
+    var elKomunikat = document.getElementById('pary-komunikat');
+    var odkryte = [], pary = 0, ruchy = 0, blokada = false;
+    var rekord = wczytaj(KLUCZ, 0);
+
+    function wygrana() {
+      var lepszy = !rekord || ruchy < rekord;
+      if (lepszy) { rekord = ruchy; zapisz(KLUCZ, rekord); }
+      elKomunikat.textContent = lepszy
+        ? 'Wszystkie pary znalezione w ' + ruchy + ' ruchach. Nowy rekord!'
+        : 'Wszystkie pary znalezione w ' + ruchy + ' ruchach. Najlepszy wynik: ' + rekord + '.';
+      elKomunikat.classList.add('widoczny');
+    }
+
+    function tasuj(t) {
+      for (var i = t.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var x = t[i]; t[i] = t[j]; t[j] = x;
+      }
+      return t;
+    }
+
+    function rozdaj() {
+      plansza.innerHTML = ''; odkryte = []; pary = 0; ruchy = 0; blokada = false;
+      elKomunikat.textContent = ''; elKomunikat.classList.remove('widoczny');
+      elPary.textContent = '0'; elRuchy.textContent = '0';
+      var talia = tasuj(POTWORY.concat(POTWORY));
+      talia.forEach(function (nazwa, i) {
+        var b = document.createElement('button');
+        b.className = 'karta'; b.type = 'button'; b.dataset.nazwa = nazwa;
+        b.setAttribute('aria-label', 'Karta ' + (i + 1) + ', zakryta');
+        b.innerHTML = '<span class="karta-w"><span class="karta-przod"></span>' +
+                      '<span class="karta-tyl"><img src="' + OBRAZY[nazwa] + '" alt=""></span></span>';
+        b.addEventListener('click', function () { odkryj(b); });
+        plansza.appendChild(b);
+      });
+    }
+
+    function odkryj(b) {
+      if (blokada || b.classList.contains('odkryta') || b.classList.contains('dopasowana')) return;
+      b.classList.add('odkryta');
+      b.setAttribute('aria-label', 'Karta odkryta: ' + b.dataset.nazwa);
+      odkryte.push(b);
+      if (odkryte.length < 2) return;
+
+      ruchy++; elRuchy.textContent = ruchy;
+      blokada = true;
+      var a = odkryte[0], c = odkryte[1];
+      if (a.dataset.nazwa === c.dataset.nazwa) {
+        setTimeout(function () {
+          a.classList.add('dopasowana'); c.classList.add('dopasowana');
+          a.disabled = c.disabled = true;
+          a.classList.remove('odkryta'); c.classList.remove('odkryta');
+          odkryte = []; blokada = false;
+          pary++; elPary.textContent = pary;
+          dzwiek('dobrze');
+          if (pary === POTWORY.length) wygrana();
+        }, 340);
+      } else {
+        setTimeout(function () {
+          a.classList.remove('odkryta'); c.classList.remove('odkryta');
+          a.setAttribute('aria-label', 'Karta zakryta');
+          c.setAttribute('aria-label', 'Karta zakryta');
+          odkryte = []; blokada = false;
+          dzwiek('pudlo');
+        }, 820);
+      }
+    }
+
+    document.getElementById('pary-reset').addEventListener('click', rozdaj);
+    rozdaj();
+  })();
 })();
 </script>
 
+<footer class="stopka-gry" style="text-align:center;color:#6d81a3;font-size:12.5px;padding:18px 16px 26px;">
+  &copy; 2026 Bartech Books &middot; Zabawy do kolorowanki halloweenowej
+</footer>
 </body>
 </html>
