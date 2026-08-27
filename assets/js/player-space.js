@@ -1,4 +1,13 @@
-/* Renderowanie kart serii Kosmos + odtwarzacz audio.
+/* Renderowanie kart serii z kodami QR (Kosmos, Maszyny Budowlane)
+   + odtwarzacz audio.
+
+   Jeden plik obsluguje obie serie. Strona wczytuje swoj rejestr
+   (SPACE albo MACHINES) i ma kontener #space-grid albo #machine-grid,
+   reszta jest wspolna. Osobne kopie pliku na serie rozjezdzalyby sie
+   przy pierwszej poprawce.
+
+   Karta maszyny ma dodatkowo link do strony zrodlowej nagrania, bo
+   14 z 40 nagran ma licencje CC BY, ktora wymaga atrybucji.
    Kopia player.js (ptaki) z trzema roznicami:
      - czyta globalna tablice SPACE i kontener #space-grid,
      - id karty to space-<slug>, a slug jest wspolny dla PL i EN
@@ -79,6 +88,15 @@ function createSpaceCard(item) {
     const popup = document.createElement('div');
     popup.className = 'bird-attribution-popup';
     popup.textContent = item.attribution + '. ';
+    if (item.sourceUrl) {
+      const zrodlo = document.createElement('a');
+      zrodlo.href = item.sourceUrl;
+      zrodlo.target = '_blank';
+      zrodlo.rel = 'noopener';
+      zrodlo.textContent = currentLang() === 'en' ? 'Source' : 'Źródło';
+      popup.appendChild(zrodlo);
+      popup.appendChild(document.createTextNode(' · '));
+    }
     if (item.licenseUrl) {
       const link = document.createElement('a');
       link.href = item.licenseUrl;
@@ -387,9 +405,11 @@ function fallbackCopy(text, onSuccess) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.getElementById('space-grid');
-  if (!grid || typeof SPACE === 'undefined') return;
-  SPACE.forEach(item => grid.appendChild(createSpaceCard(item)));
+  const grid = document.getElementById('space-grid') || document.getElementById('machine-grid');
+  const rejestr = (typeof SPACE !== 'undefined') ? SPACE
+                : (typeof MACHINES !== 'undefined') ? MACHINES : null;
+  if (!grid || !rejestr) return;
+  rejestr.forEach(item => grid.appendChild(createSpaceCard(item)));
 
   scrollToHighlightedCard();
 });

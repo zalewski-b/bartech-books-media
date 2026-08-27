@@ -57,3 +57,12 @@
 @media (max-width: 560px) {
   .space-card-fact { -webkit-line-clamp: 6; line-clamp: 6; }
 }
+
+/* Seria Maszyny Budowlane: ciekawostki sa dluzsze niz przy Kosmosie
+   (mediana 105 znakow wobec 92), a przy czterech liniach ostatnie zdanie
+   sie urywalo. Siatka i tak wyrownuje wysokosc kart w rzedzie, wiec
+   podniesienie limitu nie psuje ukladu. */
+#machine-grid .space-card-fact {
+  -webkit-line-clamp: 7;
+  line-clamp: 7;
+}
