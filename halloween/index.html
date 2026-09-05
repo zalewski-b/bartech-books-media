@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Trzy darmowe gry z potworkami z halloweenowej kolorowanki Bartech Books: szukanie, ucieczka duszka i pary potworkow.">
 <link rel="icon" type="image/png" href="../assets/images/favicon-32.png">
+<meta charset="utf-8">
 <title>Nocne igraszki</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -123,6 +124,28 @@ body {
 }
 .komunikat.widoczny { display: block; }
 .nota { margin: 14px 10px 0; color: #6d81a3; font-size: 12.5px; text-align: center; line-height: 1.5; }
+
+/* --- bonus: kolorowanki do wydruku ---------------------------------------- */
+.bonus { margin: 18px 10px 0; padding: 16px; background: var(--panel);
+  border: 1px solid var(--panel-krawedz); border-radius: 18px; }
+.bonus h2 { font-family: var(--font-display); font-size: clamp(22px, 6vw, 32px);
+  color: var(--dynia); margin: 0 0 4px; letter-spacing: .03em; text-align: center; }
+.bonus p { margin: 0 auto 14px; max-width: 60ch; text-align: center;
+  color: var(--tekst-cichy); font-size: 14px; line-height: 1.55; }
+/* Dziesiec kafelkow ma sie ukladac w dwa rowne rzedy po piec, a nie w jeden
+   rzad osmiu i wdowi rzad dwoch. Na waskim ekranie siatka sama sie zwija. */
+.bonus-siatka { display: grid; gap: 8px; margin-bottom: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+@media (min-width: 560px) { .bonus-siatka { grid-template-columns: repeat(5, 1fr); } }
+.bonus-kafel { position: relative; aspect-ratio: 3 / 4; border-radius: 12px;
+  overflow: hidden; background: #f4f1ea; border: 1px solid var(--panel-krawedz); }
+.bonus-kafel img { position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; padding: 4px; }
+.bonus-kafel span { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 6px;
+  background: rgba(6,12,26,.78); color: var(--tekst); font-size: 11px; font-weight: 700;
+  text-align: center; }
+.bonus .przycisk { display: block; max-width: 420px; margin: 0 auto; text-align: center;
+  text-decoration: none; line-height: 22px; }
 
 /* --- gra 1: kryjowki ------------------------------------------------------- */
 .scena { display: block; width: 100%; height: auto; touch-action: manipulation; }
@@ -434,6 +457,28 @@ body {
         <button class="przycisk glowny" id="pary-reset" type="button">Nowe rozdanie</button>
       </div>
     </div>
+  </section>
+
+  <section class="bonus">
+    <h2>10 rysunków ekstra</h2>
+    <p>
+      Te 10 nie zmieściło się w książce. Są trudniejsze niż strony
+      w środku, mają więcej drobnych pól do wypełnienia. Jeden plik PDF,
+      format A4, do wydrukowania w domu.
+    </p>
+    <div class="bonus-siatka">
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/dom.webp" alt="Nawiedzony dom" loading="lazy"><span>Nawiedzony dom</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/brama.webp" alt="Kuta brama" loading="lazy"><span>Kuta brama</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/wampirek.webp" alt="Wampirek" loading="lazy"><span>Wampirek</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/woz.webp" alt="Wóz z dyniami" loading="lazy"><span>Wóz z dyniami</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/kosz.webp" alt="Kosz z dyniami" loading="lazy"><span>Kosz z dyniami</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/pajak.webp" alt="Pajączek" loading="lazy"><span>Pajączek</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/nagrobek.webp" alt="Stary nagrobek" loading="lazy"><span>Stary nagrobek</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/maski.webp" alt="Maski karnawałowe" loading="lazy"><span>Maski karnawałowe</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/jez.webp" alt="Jeż w liściach" loading="lazy"><span>Jeż w liściach</span></div>
+      <div class="bonus-kafel"><img src="../images/halloween/bonus/czarownica.webp" alt="Mała czarownica" loading="lazy"><span>Mała czarownica</span></div>
+    </div>
+    <a class="przycisk glowny" href="bonus/kolorowanki-bonus-halloween.pdf" download>Pobierz 10 kolorowanek (PDF)</a>
   </section>
 
   <p class="nota" id="nota">
