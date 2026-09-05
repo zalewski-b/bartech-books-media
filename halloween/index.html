@@ -132,20 +132,42 @@ body {
   color: var(--dynia); margin: 0 0 4px; letter-spacing: .03em; text-align: center; }
 .bonus p { margin: 0 auto 14px; max-width: 60ch; text-align: center;
   color: var(--tekst-cichy); font-size: 14px; line-height: 1.55; }
-/* Dziesiec kafelkow ma sie ukladac w dwa rowne rzedy po piec, a nie w jeden
-   rzad osmiu i wdowi rzad dwoch. Na waskim ekranie siatka sama sie zwija. */
-.bonus-siatka { display: grid; gap: 8px; margin-bottom: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
-@media (min-width: 560px) { .bonus-siatka { grid-template-columns: repeat(5, 1fr); } }
-.bonus-kafel { position: relative; aspect-ratio: 3 / 4; border-radius: 12px;
-  overflow: hidden; background: #f4f1ea; border: 1px solid var(--panel-krawedz); }
-.bonus-kafel img { position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: contain; padding: 4px; }
-.bonus-kafel span { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 6px;
-  background: rgba(6,12,26,.78); color: var(--tekst); font-size: 11px; font-weight: 700;
-  text-align: center; }
-.bonus .przycisk { display: block; max-width: 420px; margin: 0 auto; text-align: center;
-  text-decoration: none; line-height: 22px; }
+/* Stos kartek zamiast siatki dziesieciu miniatur. Dziesiec malych kafelkow
+   nic nie pokazywalo: rysunek ma 150 pol do kolorowania, a kafelek 96 px.
+   Tu na wierzchu lezy jeden duzy, spod niego wystaja trzy nastepne, a klik
+   zrzuca wierzchni na spod stosu. */
+.bonus-stos { position: relative; width: min(300px, 74vw); aspect-ratio: 3 / 4;
+  margin: 4px auto 14px; cursor: pointer; perspective: 900px; }
+.bonus-stos:focus-visible { outline: 2px solid var(--mieta); outline-offset: 10px;
+  border-radius: 16px; }
+.kartka { position: absolute; inset: 0; background: #f6f3ec; border-radius: 14px;
+  overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.55);
+  transform-origin: 50% 60%;
+  transform: translate(calc(var(--i) * 13px), calc(var(--i) * -9px))
+             rotate(calc(var(--i) * 2.6deg)) scale(calc(1 - var(--i) * 0.035));
+  transition: transform .42s cubic-bezier(.2,.9,.3,1), opacity .3s ease; }
+.kartka[data-schowana="tak"] { opacity: 0; pointer-events: none; }
+.kartka img { position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; padding: 7px; }
+.kartka b { position: absolute; left: 0; right: 0; bottom: 0; padding: 5px 8px;
+  background: rgba(6,12,26,.82); color: var(--tekst); font-size: 12px;
+  font-weight: 800; text-align: center; }
+.kartka.leci { transform: translate(-125%, -6%) rotate(-17deg); opacity: 0;
+  transition: transform .38s ease-in, opacity .38s ease-in; }
+.bonus-pasek { display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-bottom: 12px; }
+.bonus-pasek .strzalka { width: 40px; min-width: 40px; flex: none; padding: 8px 0;
+  font-size: 18px; line-height: 1; }
+.bonus-pasek span { font-size: 13px; font-weight: 700; color: var(--tekst-cichy);
+  min-width: 7ch; text-align: center; font-variant-numeric: tabular-nums; }
+/* Tylko link do pobrania, nie strzalki. Bez selektora dziecka bezposredniego
+   margin: 0 auto trafialo takze w strzalki i we flexie rozpychalo je na
+   krawedzie paska: kazda dostawala po 195 px marginesu automatycznego. */
+.bonus > a.przycisk { display: block; max-width: 420px; margin: 0 auto;
+  text-align: center; text-decoration: none; line-height: 22px; }
+@media (prefers-reduced-motion: reduce) {
+  .kartka, .kartka.leci { transition-duration: .01ms; }
+}
 
 /* --- gra 1: kryjowki ------------------------------------------------------- */
 .scena { display: block; width: 100%; height: auto; touch-action: manipulation; }
@@ -466,19 +488,25 @@ body {
       w środku, mają więcej drobnych pól do wypełnienia. Jeden plik PDF,
       format A4, do wydrukowania w domu.
     </p>
-    <div class="bonus-siatka">
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/dom.webp" alt="Nawiedzony dom" loading="lazy"><span>Nawiedzony dom</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/brama.webp" alt="Kuta brama" loading="lazy"><span>Kuta brama</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/wampirek.webp" alt="Wampirek" loading="lazy"><span>Wampirek</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/woz.webp" alt="Wóz z dyniami" loading="lazy"><span>Wóz z dyniami</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/kosz.webp" alt="Kosz z dyniami" loading="lazy"><span>Kosz z dyniami</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/pajak.webp" alt="Pajączek" loading="lazy"><span>Pajączek</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/nagrobek.webp" alt="Stary nagrobek" loading="lazy"><span>Stary nagrobek</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/maski.webp" alt="Maski karnawałowe" loading="lazy"><span>Maski karnawałowe</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/jez.webp" alt="Jeż w liściach" loading="lazy"><span>Jeż w liściach</span></div>
-      <div class="bonus-kafel"><img src="../images/halloween/bonus/czarownica.webp" alt="Mała czarownica" loading="lazy"><span>Mała czarownica</span></div>
+    <div class="bonus-stos" id="bonus-stos" role="button" tabindex="0"
+         aria-label="Stos dziesięciu rysunków. Kliknij, żeby zobaczyć następny">
+      <div class="kartka" data-nazwa="Nawiedzony dom"><img src="../images/halloween/bonus/dom.webp" alt="Nawiedzony dom"><b>Nawiedzony dom</b></div>
+      <div class="kartka" data-nazwa="Kuta brama"><img src="../images/halloween/bonus/brama.webp" alt="Kuta brama"><b>Kuta brama</b></div>
+      <div class="kartka" data-nazwa="Wampirek"><img src="../images/halloween/bonus/wampirek.webp" alt="Wampirek"><b>Wampirek</b></div>
+      <div class="kartka" data-nazwa="Wóz z dyniami"><img src="../images/halloween/bonus/woz.webp" alt="Wóz z dyniami"><b>Wóz z dyniami</b></div>
+      <div class="kartka" data-nazwa="Kosz z dyniami"><img src="../images/halloween/bonus/kosz.webp" alt="Kosz z dyniami"><b>Kosz z dyniami</b></div>
+      <div class="kartka" data-nazwa="Pajączek"><img src="../images/halloween/bonus/pajak.webp" alt="Pajączek"><b>Pajączek</b></div>
+      <div class="kartka" data-nazwa="Stary nagrobek"><img src="../images/halloween/bonus/nagrobek.webp" alt="Stary nagrobek"><b>Stary nagrobek</b></div>
+      <div class="kartka" data-nazwa="Maski karnawałowe"><img src="../images/halloween/bonus/maski.webp" alt="Maski karnawałowe"><b>Maski karnawałowe</b></div>
+      <div class="kartka" data-nazwa="Jeż w liściach"><img src="../images/halloween/bonus/jez.webp" alt="Jeż w liściach"><b>Jeż w liściach</b></div>
+      <div class="kartka" data-nazwa="Mała czarownica"><img src="../images/halloween/bonus/czarownica.webp" alt="Mała czarownica"><b>Mała czarownica</b></div>
     </div>
-    <a class="przycisk glowny" href="bonus/kolorowanki-bonus-halloween.pdf" download>Pobierz 10 kolorowanek (PDF)</a>
+    <div class="bonus-pasek">
+      <button class="przycisk strzalka" id="bonus-wstecz" type="button" aria-label="Poprzedni rysunek">‹</button>
+      <span id="bonus-podpis" aria-live="polite"></span>
+      <button class="przycisk strzalka" id="bonus-dalej" type="button" aria-label="Następny rysunek">›</button>
+    </div>
+    <a class="przycisk glowny" href="bonus/kolorowanki-bonus-halloween.pdf" download>Pobierz wszystkie 10 (PDF)</a>
   </section>
 
   <p class="nota" id="nota">
@@ -992,6 +1020,63 @@ body {
 
     document.getElementById('pary-reset').addEventListener('click', rozdaj);
     rozdaj();
+  })();
+
+  /* ====================== BONUS: stos kartek ====================== */
+  (function () {
+    var stos = document.getElementById('bonus-stos');
+    if (!stos) return;
+    var kartki = [].slice.call(stos.querySelectorAll('.kartka'));
+    var podpis = document.getElementById('bonus-podpis');
+    if (!kartki.length) return;
+    var kolejnosc = kartki.map(function (_, i) { return i; });
+    var zajete = false;
+
+    function ustaw() {
+      kolejnosc.forEach(function (nr, poz) {
+        var k = kartki[nr];
+        k.style.setProperty('--i', poz);
+        // Widoczne sa cztery wierzchnie. Reszta czeka niewidoczna pod spodem,
+        // zeby przegladarka nie skladala dziesieciu cieni naraz.
+        k.dataset.schowana = poz > 3 ? 'tak' : 'nie';
+        k.style.zIndex = kartki.length - poz;
+      });
+      // Nazwa rysunku stoi na samej kartce, wiec pod spodem zostaje sam
+      // licznik. Dwa razy to samo slowo obok siebie tylko rozpychalo pasek.
+      var wierzch = kartki[kolejnosc[0]];
+      podpis.textContent = (kolejnosc[0] + 1) + ' z ' + kartki.length;
+      stos.setAttribute('aria-label', wierzch.dataset.nazwa + ', rysunek ' +
+        (kolejnosc[0] + 1) + ' z ' + kartki.length +
+        '. Kliknij, żeby zobaczyć następny');
+    }
+
+    function dalej() {
+      if (zajete) return;
+      zajete = true;
+      var k = kartki[kolejnosc[0]];
+      k.classList.add('leci');
+      setTimeout(function () {
+        kolejnosc.push(kolejnosc.shift());
+        k.classList.remove('leci');
+        ustaw();
+        zajete = false;
+      }, 380);
+    }
+    function wstecz() {
+      if (zajete) return;
+      kolejnosc.unshift(kolejnosc.pop());
+      ustaw();
+    }
+
+    stos.addEventListener('click', dalej);
+    stos.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dalej(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); dalej(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); wstecz(); }
+    });
+    document.getElementById('bonus-dalej').addEventListener('click', dalej);
+    document.getElementById('bonus-wstecz').addEventListener('click', wstecz);
+    ustaw();
   })();
 })();
 </script>
