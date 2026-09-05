@@ -139,6 +139,14 @@ body {
   transform-box: fill-box; transform-origin: center bottom;
   transition: transform .62s cubic-bezier(.2,1.5,.4,1), opacity .22s ease;
 }
+/* Potworek wychylony na moment: wysuwa sie tylko czesciowo, okolo 55
+   procent drogi do pozycji koncowej, i jest mniejszy. Ma byc widoczny
+   katem oka, ale nie tak, jakby juz zostal znaleziony. */
+.potworek.zerka .wysuw {
+  opacity: 1;
+  transform: translate(calc(var(--dx) * .55), calc(var(--dy) * .55)) scale(.82);
+  transition: transform .38s cubic-bezier(.2,1.3,.4,1), opacity .18s ease;
+}
 .potworek.znaleziony .wysuw { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1); }
 .potworek.znaleziony .dygot { animation: dygot 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
 @keyframes dygot { 0%,100% { transform: translateY(0) rotate(0deg);} 50% { transform: translateY(-6px) rotate(2deg);} }
@@ -154,10 +162,25 @@ body {
 }
 .chmurka.widoczna { opacity: 1; transform: translate(-50%, 0); }
 .slot-rzad { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
-.slot { aspect-ratio: 1; min-width: 0; border-radius: 12px; background: #0a1020;
-  border: 1px dashed var(--panel-krawedz); display: grid; place-items: center;
+/* Kafelek jest kwadratem i ma nim zostac. Obrazek lezy w nim ABSOLUTNIE,
+   bo w ukladzie normalnym procentowa wysokosc dziecka nie rozwiazuje sie
+   wzgledem aspect-ratio rodzica: przy wysokich rysunkach (latarnia 288x440,
+   mumia 297x440) przegladarka liczyla wysokosc z proporcji obrazka i
+   rozpychala kafelek do 131 px przy 113 px sasiadow. Ten sam mechanizm co
+   przy kartach memory, gdzie ratunkiem bylo position: absolute.
+
+   WYSOKOSC RYSUNKU JEST WSPOLNA, nie wpisana w kwadrat. Przy kwadracie
+   object-fit: contain dopasowywal szerokie postacie (nietoperz 440x257,
+   pajak 440x259) do szerokosci i wychodzily o 36 procent nizsze od mumii.
+   Teraz kafelek jest lezacy 1,3:1, a rysunek ma stala wysokosc 70 procent
+   kafelka; najszersza postac zajmuje wtedy 92 procent szerokosci, wiec
+   nic nie wystaje. Cena: wysokie postacie sa wezsze niz w kwadracie. */
+.slot { position: relative; aspect-ratio: 1.3; min-width: 0; border-radius: 12px;
+  background: #0a1020; border: 1px dashed var(--panel-krawedz);
   transition: background .3s ease, border-color .3s ease, transform .3s cubic-bezier(.2,1.6,.4,1); }
-.slot img { width: 76%; height: 76%; object-fit: contain; opacity: .18; filter: grayscale(1);
+.slot img { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  height: 70%; width: auto; max-width: 96%; object-fit: contain;
+  opacity: .18; filter: grayscale(1);
   transition: opacity .3s ease, filter .3s ease; }
 .slot.pelny { background: #14243d; border: 1px solid var(--mieta); border-style: solid; transform: translateY(-3px); }
 .slot.pelny img { opacity: 1; filter: none; }
@@ -230,127 +253,127 @@ body {
   <section class="gra aktywna" id="gra-kryjowki" role="tabpanel" aria-labelledby="tab-kryjowki">
     <div class="ramka">
       <div class="chmurka" id="chmurka" aria-live="polite"></div>
-      <svg class="scena" viewBox="0 0 1600 1073" role="img"
-           aria-label="Nocny cmentarz: brama, nagrobki, drzewo, latarnia i dynia">
-      <image href="../images/halloween/tlo.webp" x="0" y="0" width="1600" height="1073" preserveAspectRatio="xMidYMid slice"/>
+      <svg class="scena" viewBox="0 0 2500 1277" role="img"
+           aria-label="Nocna scena: brama, kamienie, drzewo, latarnia i dynie">
+      <image href="../images/halloween/tlo.webp" x="0" y="0" width="2500" height="1277" preserveAspectRatio="xMidYMax slice"/>
 
       <g class="potworek" id="p-brama" style="--dx:-140px; --dy:-28px;">
         <g class="wysuw">
-          <circle class="blysk" cx="300" cy="779" r="75" fill="var(--mieta)"/>
-          <g transform="translate(223.4,703.6)"><g class="dygot">
+          <circle class="blysk" cx="735" cy="846" r="75" fill="var(--mieta)"/>
+          <g transform="translate(658.8,771.0)"><g class="dygot">
             <image href="../images/halloween/duszek.webp" x="0" y="0" width="153.1" height="150"/>
           </g></g>
         </g>
       </g>
-      <g class="kryjowka" data-id="brama" data-nazwa="Duszek" data-potworek="duszek" role="button" tabindex="0" aria-label="Brama cmentarna. Sprawdź, kto się za nią chowa">
-        <rect class="strefa" x="145" y="584" width="310" height="290"/>
+      <g class="kryjowka" data-id="brama" data-nazwa="Duszek" data-potworek="duszek" role="button" tabindex="0" aria-label="Stara brama. Sprawdź, kto się za nią chowa">
+        <rect class="strefa" x="570" y="651" width="310" height="290"/>
         <g class="bryla">
-          <image href="../images/halloween/brama.webp" x="165.1" y="603.6" width="269.7" height="250"/>
-        </g>
-      </g>
-
-      <g class="potworek" id="p-nagrobek" style="--dx:128px; --dy:-12px;">
-        <g class="wysuw">
-          <circle class="blysk" cx="470" cy="801" r="56" fill="var(--mieta)"/>
-          <g transform="translate(374.9,744.8)"><g class="dygot">
-            <image href="../images/halloween/pajaczek.webp" x="0" y="0" width="190.3" height="112"/>
-          </g></g>
-        </g>
-      </g>
-      <g class="kryjowka" data-id="nagrobek" data-nazwa="Pajączek" data-potworek="pajaczek" role="button" tabindex="0" aria-label="Nagrobek. Sprawdź, kto się za nim chowa">
-        <rect class="strefa" x="368" y="647" width="205" height="230"/>
-        <g class="bryla">
-          <image href="../images/halloween/nagrobek.webp" x="401.1" y="666.8" width="137.8" height="190"/>
-        </g>
-      </g>
-
-      <g class="potworek" id="p-krzyz" style="--dx:-126px; --dy:-8px;">
-        <g class="wysuw">
-          <circle class="blysk" cx="640" cy="785" r="75" fill="var(--mieta)"/>
-          <g transform="translate(579.7,710.0)"><g class="dygot">
-            <image href="../images/halloween/kotek.webp" x="0" y="0" width="120.7" height="150"/>
-          </g></g>
-        </g>
-      </g>
-      <g class="kryjowka" data-id="krzyz" data-nazwa="Kotek" data-potworek="kotek" role="button" tabindex="0" aria-label="Kamienny krzyż. Sprawdź, kto się za nim chowa">
-        <rect class="strefa" x="538" y="630" width="205" height="250"/>
-        <g class="bryla">
-          <image href="../images/halloween/krzyz.webp" x="565.9" y="650.0" width="148.2" height="210"/>
-        </g>
-      </g>
-
-      <g class="potworek" id="p-krypta" style="--dx:136px; --dy:-16px;">
-        <g class="wysuw">
-          <circle class="blysk" cx="810" cy="789" r="74" fill="var(--mieta)"/>
-          <g transform="translate(760.0,715.2)"><g class="dygot">
-            <image href="../images/halloween/mumia.webp" x="0" y="0" width="99.9" height="148"/>
-          </g></g>
-        </g>
-      </g>
-      <g class="kryjowka" data-id="krypta" data-nazwa="Mumia" data-potworek="mumia" role="button" tabindex="0" aria-label="Grobowiec. Sprawdź, kto się za nim chowa">
-        <rect class="strefa" x="702" y="643" width="217" height="240"/>
-        <g class="bryla">
-          <image href="../images/halloween/krypta.webp" x="721.5" y="663.2" width="176.9" height="200"/>
-        </g>
-      </g>
-
-      <g class="potworek" id="p-drzewo" style="--dx:-148px; --dy:-205px;">
-        <g class="wysuw">
-          <circle class="blysk" cx="990" cy="805" r="62" fill="var(--mieta)"/>
-          <g transform="translate(883.9,742.6)"><g class="dygot">
-            <image href="../images/halloween/wampirek.webp" x="0" y="0" width="212.3" height="124"/>
-          </g></g>
-        </g>
-      </g>
-      <g class="kryjowka" data-id="drzewo" data-nazwa="Wampirek" data-potworek="wampirek" role="button" tabindex="0" aria-label="Uschłe drzewo. Sprawdź, kto się za nim chowa">
-        <rect class="strefa" x="815" y="497" width="350" height="390"/>
-        <g class="bryla">
-          <image href="../images/halloween/drzewo.webp" x="835.2" y="516.6" width="309.6" height="350"/>
-        </g>
-      </g>
-
-      <g class="potworek" id="p-glaz" style="--dx:118px; --dy:-12px;">
-        <g class="wysuw">
-          <circle class="blysk" cx="1170" cy="804" r="66" fill="var(--mieta)"/>
-          <g transform="translate(1085.1,737.9)"><g class="dygot">
-            <image href="../images/halloween/jednooki.webp" x="0" y="0" width="169.8" height="132"/>
-          </g></g>
-        </g>
-      </g>
-      <g class="kryjowka" data-id="glaz" data-nazwa="Jednooki" data-potworek="jednooki" role="button" tabindex="0" aria-label="Głaz. Sprawdź, kto się za nim chowa">
-        <rect class="strefa" x="1065" y="685" width="209" height="205"/>
-        <g class="bryla">
-          <image href="../images/halloween/glaz.webp" x="1085.4" y="734.9" width="169.2" height="135"/>
+          <image href="../images/halloween/brama.webp" x="600.6" y="688.4" width="269.7" height="250"/>
         </g>
       </g>
 
       <g class="potworek" id="p-latarnia" style="--dx:74px; --dy:-168px;">
         <g class="wysuw">
-          <circle class="blysk" cx="1345" cy="796" r="78" fill="var(--mieta)"/>
-          <g transform="translate(1294.3,718.2)"><g class="dygot">
+          <circle class="blysk" cx="966" cy="856" r="78" fill="var(--mieta)"/>
+          <g transform="translate(915.0,778.4)"><g class="dygot">
             <image href="../images/halloween/szkielecik.webp" x="0" y="0" width="101.5" height="155"/>
           </g></g>
         </g>
       </g>
       <g class="kryjowka" data-id="latarnia" data-nazwa="Szkielecik" data-potworek="szkielecik" role="button" tabindex="0" aria-label="Latarnia. Sprawdź, kto się za nią chowa">
-        <rect class="strefa" x="1242" y="563" width="205" height="330"/>
+        <rect class="strefa" x="870" y="623" width="191" height="330"/>
         <g class="bryla">
-          <image href="../images/halloween/latarnia.webp" x="1302.9" y="583.2" width="84.2" height="290"/>
+          <image href="../images/halloween/latarnia.webp" x="923.6" y="649.1" width="84.2" height="290"/>
+        </g>
+      </g>
+
+      <g class="potworek" id="p-krypta" style="--dx:136px; --dy:-16px;">
+        <g class="wysuw">
+          <circle class="blysk" cx="1150" cy="875" r="74" fill="var(--mieta)"/>
+          <g transform="translate(1099.7,800.7)"><g class="dygot">
+            <image href="../images/halloween/mumia.webp" x="0" y="0" width="99.9" height="148"/>
+          </g></g>
+        </g>
+      </g>
+      <g class="kryjowka" data-id="krypta" data-nazwa="Mumia" data-potworek="mumia" role="button" tabindex="0" aria-label="Stary domek. Sprawdź, kto się za nim chowa">
+        <rect class="strefa" x="1041" y="729" width="245" height="240"/>
+        <g class="bryla">
+          <image href="../images/halloween/krypta.webp" x="1061.2" y="767.3" width="176.9" height="200" transform="rotate(5.65,1149.7,967.3)"/>
+        </g>
+      </g>
+
+      <g class="potworek" id="p-drzewo" style="--dx:-148px; --dy:-205px;">
+        <g class="wysuw">
+          <circle class="blysk" cx="1446" cy="910" r="62" fill="var(--mieta)"/>
+          <g transform="translate(1340.1,848.4)"><g class="dygot">
+            <image href="../images/halloween/wampirek.webp" x="0" y="0" width="212.3" height="124"/>
+          </g></g>
+        </g>
+      </g>
+      <g class="kryjowka" data-id="drzewo" data-nazwa="Wampirek" data-potworek="wampirek" role="button" tabindex="0" aria-label="Uschłe drzewo. Sprawdź, kto się za nim chowa">
+        <rect class="strefa" x="1247" y="602" width="350" height="390"/>
+        <g class="bryla">
+          <image href="../images/halloween/drzewo.webp" x="1291.5" y="636.8" width="309.6" height="350"/>
+        </g>
+      </g>
+
+      <g class="potworek" id="p-glaz" style="--dx:118px; --dy:-12px;">
+        <g class="wysuw">
+          <circle class="blysk" cx="1739" cy="918" r="66" fill="var(--mieta)"/>
+          <g transform="translate(1654.1,852.3)"><g class="dygot">
+            <image href="../images/halloween/jednooki.webp" x="0" y="0" width="169.8" height="132"/>
+          </g></g>
+        </g>
+      </g>
+      <g class="kryjowka" data-id="glaz" data-nazwa="Jednooki" data-potworek="jednooki" role="button" tabindex="0" aria-label="Głaz. Sprawdź, kto się za nim chowa">
+        <rect class="strefa" x="1634" y="799" width="243" height="205"/>
+        <g class="bryla">
+          <image href="../images/halloween/glaz.webp" x="1654.5" y="859.3" width="169.2" height="135"/>
+        </g>
+      </g>
+
+      <g class="potworek" id="p-kamien" style="--dx:0px; --dy:-25px;">
+        <g class="wysuw">
+          <circle class="blysk" cx="1946" cy="798" r="56" fill="var(--mieta)"/>
+          <g transform="translate(1850.7,742.5)"><g class="dygot">
+            <image href="../images/halloween/pajaczek.webp" x="0" y="0" width="190.3" height="112"/>
+          </g></g>
+        </g>
+      </g>
+      <g class="kryjowka" data-id="kamien" data-nazwa="Pajączek" data-potworek="pajaczek" role="button" tabindex="0" aria-label="Kamienna płyta. Sprawdź, kto się za nią chowa">
+        <rect class="strefa" x="1839" y="717" width="214" height="288"/>
+        <g class="bryla">
+          <image href="../images/halloween/kamien.webp" x="1877.0" y="798.5" width="137.8" height="190"/>
+        </g>
+      </g>
+
+      <g class="potworek" id="p-dynie" style="--dx:-126px; --dy:-8px;">
+        <g class="wysuw">
+          <circle class="blysk" cx="2142" cy="897" r="75" fill="var(--mieta)"/>
+          <g transform="translate(2081.4,822.4)"><g class="dygot">
+            <image href="../images/halloween/kotek.webp" x="0" y="0" width="120.7" height="150"/>
+          </g></g>
+        </g>
+      </g>
+      <g class="kryjowka" data-id="dynie" data-nazwa="Kotek" data-potworek="kotek" role="button" tabindex="0" aria-label="Dwie dynie. Sprawdź, kto się za nimi chowa">
+        <rect class="strefa" x="2015" y="742" width="205" height="250"/>
+        <g class="bryla">
+          <image href="../images/halloween/dynie.webp" x="2068.1" y="774.5" width="147.4" height="210"/>
         </g>
       </g>
 
       <g class="potworek" id="p-dynia" style="--dx:-132px; --dy:-18px;">
         <g class="wysuw">
-          <circle class="blysk" cx="1510" cy="800" r="76" fill="var(--mieta)"/>
-          <g transform="translate(1432.6,724.3)"><g class="dygot">
+          <circle class="blysk" cx="2364" cy="872" r="76" fill="var(--mieta)"/>
+          <g transform="translate(2287.0,795.8)"><g class="dygot">
             <image href="../images/halloween/wilkolaczek.webp" x="0" y="0" width="154.8" height="152"/>
           </g></g>
         </g>
       </g>
       <g class="kryjowka" data-id="dynia" data-nazwa="Wilkołaczek" data-potworek="wilkolaczek" role="button" tabindex="0" aria-label="Dynia. Sprawdź, kto się za nią chowa">
-        <rect class="strefa" x="1394" y="681" width="231" height="215"/>
+        <rect class="strefa" x="2215" y="753" width="231" height="215"/>
         <g class="bryla">
-          <image href="../images/halloween/dynia.webp" x="1414.4" y="701.3" width="191.2" height="175"/>
+          <image href="../images/halloween/dynia.webp" x="2268.8" y="787.0" width="191.2" height="175"/>
         </g>
       </g>
       </svg>
@@ -360,6 +383,10 @@ body {
         <span class="licznik-tekst">Znalezione: <b id="ile">0</b> z <b>8</b></span>
         <span class="licznik-tekst" id="stan-podpowiedzi" style="color:var(--tekst-cichy); font-size:14px;"></span>
       </div>
+      <p class="podtytul" style="margin:2px 0 10px; font-size:14px;">
+        Patrz uważnie: potworki wychylają się na chwilę zza kryjówek.
+        Kliknij ten, który właśnie wyjrzał.
+      </p>
       <div class="slot-rzad" id="sloty"></div>
       <div class="sterowanie">
         <button class="przycisk glowny" id="podpowiedz-btn" type="button">Podpowiedz</button>
@@ -372,7 +399,7 @@ body {
   <section class="gra" id="gra-ucieczka" role="tabpanel" aria-labelledby="tab-ucieczka">
     <div class="ramka">
       <canvas id="plotno" width="900" height="340" role="img"
-              aria-label="Duszek ucieka przez cmentarz, przeskakuj nagrobki"></canvas>
+              aria-label="Duszek biegnie nocą, przeskakuj przeszkody"></canvas>
       <div class="nakladka" id="nakladka">
         <h3 id="nakladka-tytul">Ucieczka duszka</h3>
         <p id="nakladka-tekst">Dotknij ekranu albo naciśnij spację, żeby podskoczyć.</p>
@@ -422,23 +449,23 @@ body {
   var OBRAZY = {
     "tlo": "../images/halloween/tlo.webp",
     "brama": "../images/halloween/brama.webp",
-    "nagrobek": "../images/halloween/nagrobek.webp",
-    "krzyz": "../images/halloween/krzyz.webp",
+    "latarnia": "../images/halloween/latarnia.webp",
     "krypta": "../images/halloween/krypta.webp",
     "drzewo": "../images/halloween/drzewo.webp",
     "glaz": "../images/halloween/glaz.webp",
-    "latarnia": "../images/halloween/latarnia.webp",
+    "kamien": "../images/halloween/kamien.webp",
+    "dynie": "../images/halloween/dynie.webp",
     "dynia": "../images/halloween/dynia.webp",
     "duszek": "../images/halloween/duszek.webp",
-    "pajaczek": "../images/halloween/pajaczek.webp",
-    "kotek": "../images/halloween/kotek.webp",
+    "szkielecik": "../images/halloween/szkielecik.webp",
     "mumia": "../images/halloween/mumia.webp",
     "wampirek": "../images/halloween/wampirek.webp",
     "jednooki": "../images/halloween/jednooki.webp",
-    "szkielecik": "../images/halloween/szkielecik.webp",
+    "pajaczek": "../images/halloween/pajaczek.webp",
+    "kotek": "../images/halloween/kotek.webp",
     "wilkolaczek": "../images/halloween/wilkolaczek.webp"
   };
-  var POTWORY = ["duszek", "pajaczek", "kotek", "mumia", "wampirek", "jednooki", "szkielecik", "wilkolaczek"];
+  var POTWORY = ["duszek", "szkielecik", "mumia", "wampirek", "jednooki", "pajaczek", "kotek", "wilkolaczek"];
 
   /* ====================== wspolne ====================== */
   function zapisz(klucz, wartosc) {
@@ -524,29 +551,85 @@ body {
       if (zEfektem) { dzwiek('dobrze'); chmurka(k.dataset.nazwa); }
     }
     function odswiez() { elIle.textContent = znalezione.length; }
+    /* MECHANIKA WYCHYLANIA (05.09.2026)
+       Wczesniej wystarczylo kliknac po kolei wszystkie osiem kryjowek i gra
+       sama sie konczyla, bez patrzenia na scene. Teraz potworek sam wychyla
+       sie zza swojego obiektu na OKNO milisekund i tylko w tym czasie klik
+       go znajduje. Poza oknem kryjowka tylko drgnie.
+
+       Losujemy wylacznie sposrod jeszcze nieznalezionych i nie powtarzamy
+       tego samego dwa razy z rzedu, zeby dziecko nie czekalo w kolko na te
+       sama kryjowke. */
+    var OKNO_MS = 1700;          // jak dlugo potworek jest widoczny
+    var PRZERWA_MIN = 900;       // odstep miedzy wychyleniami
+    var PRZERWA_MAX = 2100;
+    var wychylony = null, poprzedni = null;
+    var timerWychylenia = null, timerSchowania = null;
+
+    function schowaj() {
+      if (!wychylony) return;
+      var p = document.getElementById('p-' + wychylony);
+      if (p) p.classList.remove('zerka');
+      wychylony = null;
+      elStan.textContent = '';
+    }
+    function wychyl() {
+      schowaj();
+      var brak = kryjowki.filter(function (k) {
+        return znalezione.indexOf(k.dataset.id) === -1;
+      });
+      if (!brak.length) return;
+      var pula = brak.length > 1
+        ? brak.filter(function (k) { return k.dataset.id !== poprzedni; })
+        : brak;
+      var k = pula[Math.floor(Math.random() * pula.length)];
+      wychylony = k.dataset.id;
+      poprzedni = wychylony;
+      document.getElementById('p-' + wychylony).classList.add('zerka');
+      elStan.textContent = 'Ktoś się wychylił!';
+      clearTimeout(timerSchowania);
+      timerSchowania = setTimeout(function () { schowaj(); zaplanuj(); }, OKNO_MS);
+    }
+    function zaplanuj() {
+      clearTimeout(timerWychylenia);
+      var t = PRZERWA_MIN + Math.random() * (PRZERWA_MAX - PRZERWA_MIN);
+      timerWychylenia = setTimeout(wychyl, t);
+    }
     function stopPodpowiedz() {
-      clearTimeout(timerPodpowiedzi); elStan.textContent = '';
+      clearTimeout(timerWychylenia); clearTimeout(timerSchowania);
+      schowaj();
       kryjowki.forEach(function (k) { k.classList.remove('podpowiedz'); });
     }
     function podpowiedz() {
-      var brak = kryjowki.filter(function (k) { return znalezione.indexOf(k.dataset.id) === -1; });
-      if (!brak.length) return;
-      brak[0].classList.add('podpowiedz');
-      elStan.textContent = 'Coś się rusza…';
+      /* Przycisk "Podpowiedz" nie pokazuje juz odpowiedzi wprost, tylko
+         przyspiesza najblizsze wychylenie i wydluza je. */
+      clearTimeout(timerWychylenia);
+      var stare = OKNO_MS;
+      OKNO_MS = 2800;
+      wychyl();
+      setTimeout(function () { OKNO_MS = stare; }, 3000);
     }
-    function startPodpowiedzi() { stopPodpowiedz(); timerPodpowiedzi = setTimeout(podpowiedz, 20000); }
+    function startPodpowiedzi() { stopPodpowiedz(); zaplanuj(); }
 
     kryjowki.forEach(function (k) {
       function klik() {
-        stopPodpowiedz();
         if (znalezione.indexOf(k.dataset.id) !== -1) {
           k.classList.remove('puka'); void k.offsetWidth; k.classList.add('puka');
           dzwiek('pudlo'); return;
         }
+        /* Trafienie liczy sie tylko wtedy, gdy TEN potworek jest akurat
+           wychylony. Poza oknem kryjowka drgnie i nic wiecej. */
+        if (wychylony !== k.dataset.id) {
+          k.classList.remove('puka'); void k.offsetWidth; k.classList.add('puka');
+          dzwiek('pudlo'); chmurka('Tu nikogo teraz nie ma');
+          return;
+        }
+        clearTimeout(timerSchowania);
+        schowaj();
         znalezione.push(k.dataset.id); zapisz(KLUCZ, znalezione);
         odslon(k, true); odswiez();
-        if (znalezione.length < kryjowki.length) startPodpowiedzi();
-        else chmurka('Wszystkie znalezione!');
+        if (znalezione.length < kryjowki.length) zaplanuj();
+        else { stopPodpowiedz(); chmurka('Wszystkie znalezione!'); }
       }
       k.addEventListener('click', klik);
       k.addEventListener('keydown', function (e) {
@@ -563,9 +646,7 @@ body {
     });
     odswiez(); startPodpowiedzi();
 
-    document.getElementById('podpowiedz-btn').addEventListener('click', function () {
-      stopPodpowiedz(); podpowiedz(); setTimeout(startPodpowiedzi, 3000);
-    });
+    document.getElementById('podpowiedz-btn').addEventListener('click', podpowiedz);
     document.getElementById('reset-btn').addEventListener('click', function () {
       znalezione = []; zapisz(KLUCZ, znalezione);
       kryjowki.forEach(function (k) {
@@ -576,7 +657,7 @@ body {
       odswiez(); startPodpowiedzi();
     });
 
-    /* Kod QR ze strony ksiazki: #nagrobek podswietla te jedna kryjowke. */
+    /* Kod QR ze strony ksiazki: #kamien podswietla te jedna kryjowke. */
     function zHasza() {
       var slug = decodeURIComponent(location.hash.replace('#', '')).trim().toLowerCase();
       if (!slug) return;
@@ -609,10 +690,22 @@ body {
     var nWynik = document.getElementById('nakladka-wynik');
 
     var obrazy = {}, gotowe = false;
-    var PRZESZKODY = ['nagrobek', 'krzyz', 'glaz', 'dynia'];
+    // Cztery martwe przeszkody i dwie zywe. Mumia i szkielecik sa wyzsze,
+    // wiec skok trzeba wyliczyc lepiej, ale nadal miesci sie z zapasem:
+    // wysokosc skoku to SILA_SKOKU^2 / (2 * GRAWITACJA) = 120 px, a przy
+    // najwyzszej przeszkodzie 88 px duszek jest ponad nia przez 0,33 s,
+    // czyli 204 px drogi przy predkosci maksymalnej 620 px/s.
+    var PRZESZKODY = [
+      { typ: 'kamien',     min: 52, max: 78, zywy: false },
+      { typ: 'dynie',      min: 56, max: 82, zywy: false },
+      { typ: 'glaz',       min: 50, max: 72, zywy: false },
+      { typ: 'dynia',      min: 52, max: 76, zywy: false },
+      { typ: 'mumia',      min: 72, max: 88, zywy: true, kto: 'Mumia złapała duszka' },
+      { typ: 'szkielecik', min: 72, max: 88, zywy: true, kto: 'Szkielecik złapał duszka' }
+    ];
 
     function wczytajObrazy(gotoweCb) {
-      var lista = ['duszek', 'tlo'].concat(PRZESZKODY);
+      var lista = ['duszek', 'tlo'].concat(PRZESZKODY.map(function (p) { return p.typ; }));
       var zostalo = lista.length;
       lista.forEach(function (n) {
         var im = new Image();
@@ -647,23 +740,26 @@ body {
       ostatniaKlatka = performance.now();
       requestAnimationFrame(petla);
     }
-    function koniec() {
+    function koniec(p) {
       stan = 'koniec'; dzwiek('koniec');
       var w = Math.floor(dystans / 10);
       if (w > rekord) { rekord = w; zapisz(KLUCZ, rekord); elRekord.textContent = rekord; }
       nTytul.textContent = 'Złapany!';
-      nTekst.textContent = 'Duszek wpadł na przeszkodę.';
+      nTekst.textContent = (p && p.kto)
+        ? p.kto + '. Następnym razem podskocz wcześniej.'
+        : 'Duszek wpadł na przeszkodę.';
       nWynik.textContent = 'Wynik: ' + w + '   Najlepszy: ' + rekord;
       document.getElementById('start-btn').textContent = 'Jeszcze raz';
       nakladka.classList.remove('ukryta');
     }
 
     function dodajPrzeszkode() {
-      var typ = PRZESZKODY[Math.floor(Math.random() * PRZESZKODY.length)];
-      var im = obrazy[typ];
-      var h = 52 + Math.random() * 26;
+      var d = PRZESZKODY[Math.floor(Math.random() * PRZESZKODY.length)];
+      var im = obrazy[d.typ];
+      var h = d.min + Math.random() * (d.max - d.min);
       var w = im && im.height ? h * (im.width / im.height) : h;
-      przeszkody.push({ typ: typ, x: SZER + 40, w: w, h: h });
+      przeszkody.push({ typ: d.typ, x: SZER + 40, w: w, h: h,
+                        zywy: d.zywy, kto: d.kto, faza: Math.random() * 6.28 });
     }
 
     function rysujTlo() {
@@ -723,14 +819,24 @@ body {
           dw = duszek.w - 20, dh = duszek.h - 12;
       for (var i = 0; i < przeszkody.length; i++) {
         var p = przeszkody[i];
-        var px = p.x + 6, py = ZIEMIA - p.h, pw = p.w - 12, ph = p.h;
-        if (dx < px + pw && dx + dw > px && dy < py + ph && dy + dh > py) { koniec(); return; }
+        // Postac jest wezsza od swojej ramki: mumia i szkielecik maja
+        // rozlozone rece i przezroczyste marginesy, wiec pudlo kolizji
+        // liczymy w ulamku szerokosci, a nie stalymi 6 px jak przy glazie.
+        var px, pw, py, ph;
+        if (p.zywy) { px = p.x + p.w * 0.20; pw = p.w * 0.60; py = ZIEMIA - p.h + 8; ph = p.h - 8; }
+        else        { px = p.x + 6;          pw = p.w - 12;   py = ZIEMIA - p.h;     ph = p.h; }
+        if (dx < px + pw && dx + dw > px && dy < py + ph && dy + dh > py) { koniec(p); return; }
       }
 
       rysujTlo();
       przeszkody.forEach(function (p) {
         var im = obrazy[p.typ];
-        if (im && im.width) ctx.drawImage(im, p.x, ZIEMIA - p.h, p.w, p.h);
+        if (!im || !im.width) return;
+        // Zywe przeszkody lekko dygocza, zeby na pierwszy rzut oka bylo
+        // widac, ze to nie kamien. Kolizja liczy sie od ziemi, wiec
+        // bujanie nie zmienia trudnosci.
+        var buj = p.zywy ? Math.sin(dystans / 18 + p.faza) * 3 : 0;
+        ctx.drawImage(im, p.x, ZIEMIA - p.h + buj, p.w, p.h);
       });
       var im = obrazy.duszek;
       var bujanie = duszek.wPowietrzu ? 0 : Math.sin(dystans / 26) * 4;
